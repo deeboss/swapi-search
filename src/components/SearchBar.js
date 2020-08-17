@@ -23,43 +23,65 @@ const SearchBar = () => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
             .then(({ results }) => {
-                // const options = results.map((i) => ({
-                //         name: i.name,
-                //         url: i.url,
-                //         homeworld_url: i.homeworld,
-                //         species_url: i.species[0],
-                //     }));
-
-                const promises = results.map((i) => {
+                const options = results.map((i) => {
                     const name = i.name;
                     const url = i.url;
-                    return axios.get(i.homeworld)
-                        .then((response) => response.data)
-                        .then((data) => {
-                            const homeworld = data.name;
-                            const homeworld_population = data.population;
-                            return data = {
-                                name: name,
-                                url: url,
-                                homeworld: homeworld,
-                                homeworld_population: homeworld_population
-                            }
-                        })
-                        .then((data) => {
-                            // console.log(data);
-                            setOptions(options => [...options, data])
-                        })
+                    let character = {
+                        name: name,
+                        url: url
+                    }
+                    
+                    Promise.all([
+                        axios.get(i.homeworld),
+                        axios.get(i.species[0])
+                    ]).then((responses) => {
+                        // Get a JSON object from each of the response
+                        return Promise.all(responses.map((response) => {
+                            // return response;
+                            console.log("inside the responses");
+                            console.log(response);
+                        }));
+                    }).then((data) => {
+                        const homeworld = data[0].data.name;
+                        const homeworld_population = data[0].data.population;
+                        const species = data[1].data.name;
+
+                        character["homeworld"] = homeworld;
+                        character["homeworld_population"] = homeworld_population;
+                        character["species"] = species;
+
+                        // const character = {
+                        //     name: name,
+                        //     url: url,
+                        //     homeworld: homeworld,
+                        //     species: species,
+                        //     homeworld_population: homeworld_population
+                        // }
+
+                        console.log(character);
+                        setOptions(options => [...options, character]);
+
+                    }).catch((error) => {
+                        console.log("inside the error")
+                        // if there's an error, log it
+                        console.log(error);
+                        character["homeworld"] = "Unknown";
+                        character["homeworld_population"] = "unknown";
+                        character["species"] = "Human";
+                        console.log(character);
+                        setOptions(options => [...options, character]);
+                    })
                 });
-                // setOptions(results);
-                console.log(options);
+
                 setIsLoading(false);
 
-                return Promise.all(promises);
+                // return Promise.all(promises);
             })
     };
 
-    useEffect(() => {
-    }, [options])
+    // useEffect(() => {
+    //     console.log(options);
+    // }, [options])
     
     return (
         <Fragment>
@@ -73,8 +95,8 @@ const SearchBar = () => {
                 placeholder="Search for a character..."
                 renderMenuItemChildren={(option) => (
                     <Fragment>
-                        <p>{option.name} ({option.species_url})</p>
-                        <p>From {option.homeworld} (population: {option.homeworld_population})</p>
+                        <p>{option.name} ({option.species})</p>
+                        <p>From {option.homeworld} (Population: {option.homeworld_population})</p>
                         {/* <p>Link: {option.url}</p> */}
                     </Fragment>
                 )}
