@@ -23,23 +23,31 @@ const SearchBar = () => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
             .then(({ results }) => {
-                console.log("================")
                 const options = results.map((i) => ({
-                    name: i.name,
-                    url: i.url,
-                    homeworld_url: i.homeworld,
-                    species_url: i.species[0],
-                }));
+                        name: i.name,
+                        url: i.url,
+                        homeworld_url: i.homeworld,
+                        species_url: i.species[0],
+                    }));
+
+                for (const i in options) {
+                    const request_url = options[i]['homeworld_url'];
+
+                    axios.get(request_url)
+                        .then((response) => response.data)
+                        .then((data) => {
+                            options[i]["homeworld"] = data.name;
+                            options[i]["homeworld_population"] = data.population;
+                        });
+                }
 
                 setOptions(options);
                 setIsLoading(false);
-
-                return options;
             })
-            .then((options) => {
-                console.log(typeof options);
-            });
     };
+
+    useEffect(() => {
+    }, [options])
     
     return (
         <Fragment>
@@ -54,8 +62,8 @@ const SearchBar = () => {
                 renderMenuItemChildren={(option) => (
                     <Fragment>
                         <p>{option.name} ({option.species_url})</p>
-                        <p>From {option.homeworld_url} (population:)</p>
-                        <p>Link: {option.url}</p>
+                        <p>From {option.homeworld} (population: {option.homeworld_population})</p>
+                        {/* <p>Link: {option.url}</p> */}
                     </Fragment>
                 )}
                 />
