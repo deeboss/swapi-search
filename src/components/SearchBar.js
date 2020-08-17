@@ -19,63 +19,57 @@ const SearchBar = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
 
-    const handleSearch = (query) => {
+    const getSpeciesInfo = url => {
+        return axios.get(`${url}`)
+            .then((response) => response.data)
+            .then((data) => {
+                return {
+                    species: data.name,
+                }
+            })
+            .catch(error => { console.error(error); return Promise.reject(error); });
+    }
+
+    const getHomeworldInfo = url => {
+        return axios.get(`${url}`)
+            .then((response) => response.data)
+            .then((data) => {
+                return {
+                    homeworld: data.name,
+                    homeworld_population: data.population
+                }
+            })
+            .catch(error => { console.errors(error); return Promise.reject(error); });
+    }
+
+    const handleSearch = query => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
-            .then(({ results }) => {
-                const options = results.map((i) => {
+            .then(({results}) => {
+                const data = results.map((i) => {
                     const name = i.name;
                     const url = i.url;
-                    let character = {
-                        name: name,
-                        url: url
-                    }
                     
-                    Promise.all([
-                        axios.get(i.homeworld),
-                        axios.get(i.species[0])
+                    axios.all([
+                        getSpeciesInfo(i.species),
+                        getHomeworldInfo(i.homeworld)
                     ]).then((responses) => {
-                        // Get a JSON object from each of the response
                         return Promise.all(responses.map((response) => {
                             // return response;
-                            console.log("inside the responses");
-                            console.log(response);
+                            // console.log(response);
+
+                            const character = {
+                                name: name,
+                                url: url,
+                                species: response.species,
+                                homeworld: response.homeworld,
+                                homeworld_population: response.homeworld_population
+                            }
+
+                            setOptions(options => [...options, character])
                         }));
-                    }).then((data) => {
-                        const homeworld = data[0].data.name;
-                        const homeworld_population = data[0].data.population;
-                        const species = data[1].data.name;
-
-                        character["homeworld"] = homeworld;
-                        character["homeworld_population"] = homeworld_population;
-                        character["species"] = species;
-
-                        // const character = {
-                        //     name: name,
-                        //     url: url,
-                        //     homeworld: homeworld,
-                        //     species: species,
-                        //     homeworld_population: homeworld_population
-                        // }
-
-                        console.log(character);
-                        setOptions(options => [...options, character]);
-
-                    }).catch((error) => {
-                        console.log("inside the error")
-                        // if there's an error, log it
-                        console.log(error);
-                        character["homeworld"] = "Unknown";
-                        character["homeworld_population"] = "unknown";
-                        character["species"] = "Human";
-                        console.log(character);
-                        setOptions(options => [...options, character]);
                     })
                 });
-
-                setIsLoading(false);
-
-                // return Promise.all(promises);
             })
     };
 
