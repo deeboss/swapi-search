@@ -23,26 +23,38 @@ const SearchBar = () => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
             .then(({ results }) => {
-                const options = results.map((i) => ({
-                        name: i.name,
-                        url: i.url,
-                        homeworld_url: i.homeworld,
-                        species_url: i.species[0],
-                    }));
+                // const options = results.map((i) => ({
+                //         name: i.name,
+                //         url: i.url,
+                //         homeworld_url: i.homeworld,
+                //         species_url: i.species[0],
+                //     }));
 
-                for (const i in options) {
-                    const request_url = options[i]['homeworld_url'];
-
-                    axios.get(request_url)
+                const promises = results.map((i) => {
+                    const name = i.name;
+                    const url = i.url;
+                    return axios.get(i.homeworld)
                         .then((response) => response.data)
                         .then((data) => {
-                            options[i]["homeworld"] = data.name;
-                            options[i]["homeworld_population"] = data.population;
-                        });
-                }
-
-                setOptions(options);
+                            const homeworld = data.name;
+                            const homeworld_population = data.population;
+                            return data = {
+                                name: name,
+                                url: url,
+                                homeworld: homeworld,
+                                homeworld_population: homeworld_population
+                            }
+                        })
+                        .then((data) => {
+                            // console.log(data);
+                            setOptions(options => [...options, data])
+                        })
+                });
+                // setOptions(results);
+                console.log(options);
                 setIsLoading(false);
+
+                return Promise.all(promises);
             })
     };
 
