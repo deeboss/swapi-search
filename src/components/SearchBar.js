@@ -34,6 +34,8 @@ const SearchBar = () => {
         return axios.get(`${url}`)
             .then((response) => response.data)
             .then((data) => {
+                // console.log("getHomeworld Data...")
+                // console.log(data);
                 return {
                     homeworld: data.name,
                     homeworld_population: data.population
@@ -46,36 +48,27 @@ const SearchBar = () => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
             .then(({results}) => {
-                const data = results.map((i) => {
-                    const name = i.name;
-                    const url = i.url;
-                    
+                const character = results.map((i) => {
+
                     axios.all([
-                        getSpeciesInfo(i.species),
-                        getHomeworldInfo(i.homeworld)
-                    ]).then((responses) => {
-                        return Promise.all(responses.map((response) => {
-                            // return response;
-                            // console.log(response);
-
-                            const character = {
-                                name: name,
-                                url: url,
-                                species: response.species,
-                                homeworld: response.homeworld,
-                                homeworld_population: response.homeworld_population
-                            }
-
-                            setOptions(options => [...options, character])
-                        }));
-                    })
+                        getHomeworldInfo(i.homeworld),
+                        getSpeciesInfo(i.species)
+                    ])
+                    .then((data) => {
+                        console.log(i.name);
+                        console.log(i.url);
+                        console.log(data[0].homeworld);
+                        console.log(data[0].homeworld_population);
+                        console.log(data[1].species);
+                    });
                 });
             })
     };
 
-    // useEffect(() => {
-    //     console.log(options);
-    // }, [options])
+    useEffect(() => {
+        console.log("useEffect");
+        console.log(options);
+    }, [options])
     
     return (
         <Fragment>
@@ -89,8 +82,8 @@ const SearchBar = () => {
                 placeholder="Search for a character..."
                 renderMenuItemChildren={(option) => (
                     <Fragment>
-                        <p>{option.name} ({option.species})</p>
-                        <p>From {option.homeworld} (Population: {option.homeworld_population})</p>
+                        {/* <p>{option.name} ({option.species})</p> */}
+                        {/* <p>From {option.homeworld} (Population: {option.homeworld_population})</p> */}
                         {/* <p>Link: {option.url}</p> */}
                     </Fragment>
                 )}
