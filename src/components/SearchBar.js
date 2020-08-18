@@ -34,8 +34,6 @@ const SearchBar = () => {
         return axios.get(`${url}`)
             .then((response) => response.data)
             .then((data) => {
-                // console.log("getHomeworld Data...")
-                // console.log(data);
                 return {
                     homeworld: data.name,
                     homeworld_population: data.population
@@ -47,21 +45,25 @@ const SearchBar = () => {
     const handleSearch = query => {
         axios.get(`https://swapi.dev/api/people/?search=${query}`)
             .then((response) => response.data)
-            .then(({results}) => {
-                const character = results.map((i) => {
-
-                    axios.all([
+            .then(async ({results}) => {
+                const promises = results.map((i) => {
+                    return Promise.all([
                         getHomeworldInfo(i.homeworld),
                         getSpeciesInfo(i.species)
                     ])
-                    .then((data) => {
-                        console.log(i.name);
-                        console.log(i.url);
-                        console.log(data[0].homeworld);
-                        console.log(data[0].homeworld_population);
-                        console.log(data[1].species);
+                    .then(data => {
+                        return {
+                            name: i.name,
+                            url: i.url,
+                            homeworld: data[0].homeworld,
+                            homeworld_population: data[0].homeworld_population,
+                            species: data[1].species
+                        }
                     });
                 });
+
+                const options = await Promise.all(promises);
+                setOptions(options);
             })
     };
 
@@ -82,9 +84,9 @@ const SearchBar = () => {
                 placeholder="Search for a character..."
                 renderMenuItemChildren={(option) => (
                     <Fragment>
-                        {/* <p>{option.name} ({option.species})</p> */}
-                        {/* <p>From {option.homeworld} (Population: {option.homeworld_population})</p> */}
-                        {/* <p>Link: {option.url}</p> */}
+                        <p>{option.name} ({option.species})</p>
+                        <p>From {option.homeworld} (Population: {option.homeworld_population})</p>
+                        <p>Link: {option.url}</p>
                     </Fragment>
                 )}
                 />
