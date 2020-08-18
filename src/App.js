@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components"
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import SearchPage from './components/SearchPage';
 import CharacterPage from './components/CharacterPage';
@@ -19,6 +19,7 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={SearchPage} />
           <Route exact path='/character/:id' component={CharacterPage} />
+          <Redirect to='/' />
         </Switch>
       </BrowserRouter>
     </Wrapper>
