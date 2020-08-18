@@ -39,16 +39,17 @@ const CharacterPage = ({match}) => {
                 })
 
                 const results = await promises;
-                console.log(results);
-
                 setCharacterDetails(results);
             })
-            
     }
 
     useEffect(() => {
         getCharacterInfo(match.params.id);
-    }, [])
+    }, [match.params.id])
+
+    useEffect(() => {
+
+    }, [characterDetails]);
     
     return (
         <Fragment>
@@ -61,10 +62,18 @@ const CharacterPage = ({match}) => {
             <p>
                 {characterDetails.species}
             </p>
-
+            <hr />
             <div>
                 <h4>Films appeared in:</h4>
-                <hr />
+                <ul>
+                    {(Object.keys(characterDetails).length !==0) && characterDetails.films.map(film => (
+                        <li key={film.title}>
+                            <h3>{film.title}</h3>
+                            <p>Release date: {film.release_date}</p>
+                            <p>{film.opening_crawl}</p>
+                        </li>
+                    ))}
+                </ul>
             </div>
 
             <Footnote>ID number: {match.params.id}</Footnote>
