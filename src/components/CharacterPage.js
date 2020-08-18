@@ -3,6 +3,8 @@ import axios from 'axios';
 import { getSpeciesInfo, getHomeworldInfo, getFilmInfo } from '../lib/api';
 import styled from "styled-components";
 
+import FilmCard from './FilmCard';
+
 const Title = styled.h1`
 
 `
@@ -14,6 +16,8 @@ const Footnote = styled.small`
 const CharacterPage = ({match}) => {
 
     const [ characterDetails, setCharacterDetails ] = useState([])
+
+    const message = 'yoyo';
     
     const getCharacterInfo = (id) => {
         axios.get(`https://swapi.dev/api/people/${id}`)
@@ -48,7 +52,6 @@ const CharacterPage = ({match}) => {
     }, [match.params.id])
 
     useEffect(() => {
-
     }, [characterDetails]);
     
     return (
@@ -65,15 +68,7 @@ const CharacterPage = ({match}) => {
             <hr />
             <div>
                 <h4>Films appeared in:</h4>
-                <ul>
-                    {(Object.keys(characterDetails).length !==0) && characterDetails.films.map(film => (
-                        <li key={film.title}>
-                            <h3>{film.title}</h3>
-                            <p>Release date: {film.release_date}</p>
-                            <p>{film.opening_crawl}</p>
-                        </li>
-                    ))}
-                </ul>
+                {(Object.keys(characterDetails).length !==0) ? <FilmCard data={characterDetails.films} /> : null }
             </div>
 
             <Footnote>ID number: {match.params.id}</Footnote>
