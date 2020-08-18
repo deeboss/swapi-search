@@ -16,8 +16,6 @@ const Footnote = styled.small`
 const CharacterPage = ({match}) => {
 
     const [ characterDetails, setCharacterDetails ] = useState([])
-
-    const message = 'yoyo';
     
     const getCharacterInfo = (id) => {
         axios.get(`https://swapi.dev/api/people/${id}`)

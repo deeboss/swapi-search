@@ -35,7 +35,7 @@ const FilmCard = (data) => {
                         <Item key={film.title}>
                             <h3>{film.title}</h3>
                             <p>Release date: {film.release_date}</p>
-                            <p>{film.opening_crawl}</p>
+                            <p>{film.clipped_opening_crawl}...</p>
                         </Item>
                 ))}
             </List>
