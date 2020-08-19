@@ -56,12 +56,19 @@ const SearchBar = () => {
     useEffect(()=>{
         console.log("Change in 'options' detected. Firing useEffect");
         console.log(options);
+        console.log("END USEEFFECT ======================");
     }, [options])
 
     const handleSearch = async (query) => {
         setIsLoading(true);
         const options = await getCharacterSearchResults(query);
         setOptions(options);
+
+        const otherDetails = options.map(async (i) => {
+            const homeworld_details = await getHomeworldInfo(i.homeworld_url);
+            const species_details = await getSpeciesInfo(i.species_url); 
+            console.log(homeworld_details);
+        });
         setIsLoading(false);
     };
 
