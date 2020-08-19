@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 
@@ -20,25 +20,41 @@ const Item = styled.li`
 `
 
 
-const FilmList = (films) => {
+const FilmList = (data) => {
+    const [ sortedFilms, setSortedFilms ] = useState({});
+    const [ isFinishedSorting, setIsFinishgSorting ] = useState(false);
 
-    // const [ films ] = useState(films);
+    const sortByDescending = (obj) => {
+        obj.map((i) => {
+            i.converted = Number(i.release_date.replace(/-/g, ""));
+        })
+
+        obj.sort((a, b) => {
+            return b.converted - a.converted;
+        });
+        
+        return obj
+    }
 
     useEffect(() => {
-        console.log("films:");
-        console.log(films);
-    }, [films])
+        if (data) {
+            setSortedFilms(sortByDescending(data.films));
+            setIsFinishgSorting(true);
+        }
+    }, [data])
     
     return (
         <Fragment>
             <List>
-                {films.films.map(film => (
-                    <Item key={film.title}>
-                        <h3>{film.title}</h3>
-                        <p>Release date: {film.release_date}</p>
-                        <p>{film.clipped_opening_crawl}</p>
-                    </Item>
-                ))}
+                { isFinishedSorting &&
+                    sortedFilms.map(film => (
+                        <Item key={film.title}>
+                            <h3>{film.title}</h3>
+                            <p>Release date: {film.release_date}</p>
+                            <p>{film.clipped_opening_crawl}</p>
+                        </Item>
+                    ))
+                }
             </List>
         </Fragment>
     )

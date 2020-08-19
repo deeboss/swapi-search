@@ -30,8 +30,6 @@ const CharacterPage = ({match}) => {
                 Promise.all(filmRequests)
             ])
 
-            console.log(moreInfo[2]);
-            
             const results = {
                 name: name,
                 homeworld: moreInfo[0].homeworld,
