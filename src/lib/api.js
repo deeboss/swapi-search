@@ -5,6 +5,8 @@ export const getCharacterSearchResults = async (query) => {
     try {
         const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
         const results = response.data.results;
+        // For pagination
+        // const { count, next, previous } = response.data;
         const promises = results.map((i) => {
             // Get ID of character for dynamic character page rendering
             const id = i.url.split('/')[5];

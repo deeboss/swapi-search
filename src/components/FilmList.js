@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import styled from "styled-components";
 
 
@@ -27,7 +27,7 @@ const FilmList = (films) => {
     useEffect(() => {
         console.log("films:");
         console.log(films);
-    }, [])
+    }, [films])
     
     return (
         <Fragment>

@@ -29,6 +29,9 @@ const CharacterPage = ({match}) => {
                 getSpeciesInfo(data.species),
                 Promise.all(filmRequests)
             ])
+
+            console.log(moreInfo[2]);
+            
             const results = {
                 name: name,
                 homeworld: moreInfo[0].homeworld,
@@ -94,8 +97,6 @@ const CharacterPage = ({match}) => {
                 <h4>Films appeared in:</h4>
                 { characterDetails.films ? <FilmList films={characterDetails.films}/> : <p>Loading...</p> }
             </div>
-
-            <Footnote>ID number: {match.params.id}</Footnote>
         </Fragment>
     )
 }
