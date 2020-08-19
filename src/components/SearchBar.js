@@ -37,6 +37,7 @@ const SearchInput = styled(AsyncTypeahead)`
 
         p {
             margin: 0;
+            color: #000000;
         }
     }
 `
@@ -48,7 +49,7 @@ const SearchBar = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
 
-    // Focus on search bar onComponentMount for UX purposes
+    // Focus on search bar onComponentMount for better UX
     useEffect(()=>{
         ref.current.focus();
     }, [])
@@ -107,7 +108,6 @@ const SearchBar = () => {
                         <div id={option.id}>
                             <p>{option.name} ({option.species})</p>
                             <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p>
-                            <small>{option.id}</small>
                         </div>
                     </Fragment>
                 )}
