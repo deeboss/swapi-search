@@ -51,13 +51,18 @@ const SearchBar = () => {
     // Focus on search bar onComponentMount for better UX
     useEffect(()=>{
         ref.current.focus();
-    }, [])
+    }, []);
+
+    useEffect(()=>{
+        console.log("Change in 'options' detected. Firing useEffect");
+        console.log(options);
+    }, [options])
 
     const handleSearch = async (query) => {
         setIsLoading(true);
-
         const options = await getCharacterSearchResults(query);
         setOptions(options);
+        setIsLoading(false);
     };
 
     const handleChange = (character) => {
@@ -79,10 +84,8 @@ const SearchBar = () => {
                 renderMenuItemChildren={(option) => (
                     <Fragment>
                         <div id={option.id}>
-                            <p>{option.name}
-                            {/* ({option.species}) */}
-                            </p>
-                            {/* <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p> */}
+                            <p>{option.name} ({option.species})</p>
+                            <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p>
                         </div>
                     </Fragment>
                 )}

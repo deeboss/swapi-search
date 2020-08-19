@@ -32,13 +32,22 @@ export const getCharacterSearchResults = async (query) => {
     try {
         const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
         const results = response.data.results;
-        const promises = results.map((i) => {
+        const promises = results.map(async (i) => {
             // Get ID of character for dynamic character page rendering
             const id = i.url.split('/')[5];
+            const test = await getHomeworldInfo(i.homeworld);
+            const test2 = await getSpeciesInfo(i.species);
+            console.log("TEST ==================");
+            console.log(test);
+            console.log(test2);
+            console.log("=======================");
 
             return {
                 name: i.name,
                 id: id,
+                homeworld: test.homeworld,
+                homeworld_population: test.homeworld_population,
+                species: test2.species
             }
         });
 
