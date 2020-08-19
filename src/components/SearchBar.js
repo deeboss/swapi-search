@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import { getSpeciesInfo, getHomeworldInfo } from '../lib/api';
+import { getCharacterSearchResults, getSpeciesInfo, getHomeworldInfo } from '../lib/api';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import styled from "styled-components";
 
@@ -54,39 +53,13 @@ const SearchBar = () => {
         ref.current.focus();
     }, [])
 
-    const handleSearch = query => {
+    const handleSearch = async (query) => {
         setIsLoading(true);
 
-        axios.get(`https://swapi.dev/api/people/?search=${query}`)
-            .then((response) => response.data)
-            .then(async ({results}) => {
-                const promises = results.map((i) => {
-
-                    // Get ID of character for dynamic character page rendering
-                    const id = i.url.split('/')[5];
-
-                    return Promise.all([
-                        getHomeworldInfo(i.homeworld),
-                        getSpeciesInfo(i.species)
-                    ])
-                    .then(data => {
-                        return {
-                            name: i.name,
-                            id: id,
-                            homeworld: data[0].homeworld,
-                            homeworld_population: data[0].homeworld_population,
-                            species: data[1].species
-                        }
-                    });
-                });
-
-                const options = await Promise.all(promises);
-                setOptions(options);
-                setIsLoading(false);
-            })
+        const options = await getCharacterSearchResults(query);
+        setOptions(options);
     };
 
-    // Note to self: destructure for simplicity
     const handleChange = (character) => {
         history.push(`/character/${character[0].id}`);
     }
@@ -106,8 +79,10 @@ const SearchBar = () => {
                 renderMenuItemChildren={(option) => (
                     <Fragment>
                         <div id={option.id}>
-                            <p>{option.name} ({option.species})</p>
-                            <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p>
+                            <p>{option.name}
+                            {/* ({option.species}) */}
+                            </p>
+                            {/* <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p> */}
                         </div>
                     </Fragment>
                 )}

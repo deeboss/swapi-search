@@ -1,5 +1,55 @@
 import axios from 'axios';
 
+// axios.get(`https://swapi.dev/api/people/?search=${query}`)
+        //     .then((response) => response.data)
+        //     .then(async ({results}) => {
+        //         const promises = results.map((i) => {
+
+        //             // Get ID of character for dynamic character page rendering
+        //             const id = i.url.split('/')[5];
+
+        //             return Promise.all([
+        //                 getHomeworldInfo(i.homeworld),
+        //                 getSpeciesInfo(i.species)
+        //             ])
+        //             .then(data => {
+        //                 return {
+        //                     name: i.name,
+        //                     id: id,
+        //                     homeworld: data[0].homeworld,
+        //                     homeworld_population: data[0].homeworld_population,
+        //                     species: data[1].species
+        //                 }
+        //             });
+        //         });
+
+        //         const options = await Promise.all(promises);
+        //         setOptions(options);
+        //         setIsLoading(false);
+        //     })
+
+export const getCharacterSearchResults = async (query) => {
+    try {
+        const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
+        const results = response.data.results;
+        const promises = results.map((i) => {
+            // Get ID of character for dynamic character page rendering
+            const id = i.url.split('/')[5];
+
+            return {
+                name: i.name,
+                id: id,
+            }
+        });
+
+        return await Promise.all(promises);
+
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
+
 export const getSpeciesInfo = async (url) => {
     try {
         const response = await axios.get(`${url}`)
