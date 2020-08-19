@@ -41,34 +41,27 @@ const SearchInput = styled(AsyncTypeahead)`
     }
 `
 
-const SearchBar = () => {  
+const SearchBar = ({options, setOptions}) => {  
     const ref = useRef();
     const history = useHistory();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [options, setOptions] = useState([]);
+    // const [options, setOptions] = useState([]);
 
     // Focus on search bar onComponentMount for better UX
     useEffect(()=>{
         ref.current.focus();
     }, []);
 
-    useEffect(()=>{
-        console.log("Change in 'options' detected. Firing useEffect");
-        console.log(options);
-        console.log("END USEEFFECT ======================");
-    }, [options])
-
     const handleSearch = async (query) => {
         setIsLoading(true);
         const options = await getCharacterSearchResults(query);
         setOptions(options);
 
-        const otherDetails = options.map(async (i) => {
-            const homeworld_details = await getHomeworldInfo(i.homeworld_url);
-            const species_details = await getSpeciesInfo(i.species_url); 
-            console.log(homeworld_details);
-        });
+        // const otherDetails = options.map(async (i) => {
+        //     const homeworld_details = await getHomeworldInfo(i.homeworld_url);
+        //     const species_details = await getSpeciesInfo(i.species_url); 
+        // });
         setIsLoading(false);
     };
 
@@ -81,21 +74,21 @@ const SearchBar = () => {
             <SearchInput
                 id="characterSearch"
                 isLoading={isLoading}
-                labelKey={(option) => `${option.name}`}
+                // labelKey={(option) => `${option.name}`}
                 minLength={2}
                 onSearch={handleSearch}
-                onChange={handleChange}
-                options={options}
+                // onChange={handleChange}
+                // options={options}
                 ref={ref}
                 placeholder="Search for a Star Wars character..."
-                renderMenuItemChildren={(option) => (
-                    <Fragment>
-                        <div id={option.id}>
-                            <p>{option.name} ({option.species})</p>
-                            <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p>
-                        </div>
-                    </Fragment>
-                )}
+                // renderMenuItemChildren={(option) => (
+                //     <Fragment>
+                //         <div id={option.id}>
+                //             <p>{option.name} ({option.species})</p>
+                //             <p><small>From {option.homeworld} (population: {option.homeworld_population})</small></p>
+                //         </div>
+                //     </Fragment>
+                // )}
                 />
         </Fragment>
     )
