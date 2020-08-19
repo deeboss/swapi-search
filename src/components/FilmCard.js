@@ -20,18 +20,19 @@ const Item = styled.li`
 `
 
 
-const FilmCard = (data) => {
+const FilmCard = (films) => {
 
-    const [ films ] = useState(data);
+    // const [ films ] = useState(films);
 
     useEffect(() => {
+        console.log("films:");
         console.log(films);
     }, [])
     
     return (
         <Fragment>
             <List>
-                {data.data.map(film => (
+                {films.films.map(film => (
                         <Item key={film.title}>
                             <h3>{film.title}</h3>
                             <p>Release date: {film.release_date}</p>
