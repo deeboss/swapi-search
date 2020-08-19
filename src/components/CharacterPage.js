@@ -15,9 +15,9 @@ const Footnote = styled.small`
 
 const CharacterPage = ({match}) => {
 
-    const [ characterDetails, setCharacterDetails ] = useState([])
+    const [ characterDetails, setCharacterDetails ] = useState({})
     
-    const getCharacterInfo = (id) => {
+    const getCharacterInfo = async (id) => {
         axios.get(`https://swapi.dev/api/people/${id}`)
             .then((response) => response.data)
             .then(async data => {
@@ -66,7 +66,7 @@ const CharacterPage = ({match}) => {
             <hr />
             <div>
                 <h4>Films appeared in:</h4>
-                {(Object.keys(characterDetails).length !==0) ? <FilmCard data={characterDetails.films} /> : null }
+                {characterDetails && <FilmCard data={characterDetails.films} />}
             </div>
 
             <Footnote>ID number: {match.params.id}</Footnote>
