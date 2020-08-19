@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { checkIfEmptyArr } from '../lib/util';
 
 export const getCharacterSearchResults = async (query) => {
     try {
@@ -23,15 +24,33 @@ export const getCharacterSearchResults = async (query) => {
     }
 }
 
+export const getCharacterInfo = async (id) => {
+    try {
+        const response = await axios.get(`https://swapi.dev/api/people/${id}`);
+        const data = response.data
+        const name = data.name;
+        return {
+            name: name
+        }
+    } catch (error) {
+        console.log("there's an error with the getCharacterInfo");
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
+
 export const getSpeciesInfo = async (url) => {
     try {
+        if (!checkIfEmptyArr(url)) {
+            return {}
+        }
         const response = await axios.get(`${url}`)
         const data = response.data
         return {
             species: data.name,
         }
     } catch (error) {
-        console.log("there's an error with the getSpeciesInfo promise!");
+        console.log("there's an error with the getSpeciesInfo");
         console.error(error);
         return Promise.reject(error);
     }
@@ -39,6 +58,9 @@ export const getSpeciesInfo = async (url) => {
 
 export const getHomeworldInfo = async (url) => {
     try {
+        if (!checkIfEmptyArr(url)) {
+            return {}
+        }
         const response = await axios.get(`${url}`)
         const data = response.data
         // Prettify number by adding commas after every 3 digits
@@ -51,8 +73,8 @@ export const getHomeworldInfo = async (url) => {
             population: population
         }
     } catch(error) {
-        console.log("there's an error with the getHomeworldInfo promise!");
-        console.errors(error);
+        console.log("there's an error with the getHomeworldInfo");
+        console.error(error);
         return Promise.reject(error);
 
     }
@@ -60,6 +82,9 @@ export const getHomeworldInfo = async (url) => {
 
 export const getFilmInfo = async (url) => {
     try {
+        if (!checkIfEmptyArr(url)) {
+            return {}
+        }
         const response = await axios.get(`${url}`)
         const data = response.data
         // Clip opening crawl to first 150 characters
@@ -71,7 +96,8 @@ export const getFilmInfo = async (url) => {
             clipped_opening_crawl: clipped_opening_crawl
         }
     } catch(error) {
-        console.errors(error);
+        console.log("there's an error with the getFilmInfo");
+        console.error(error);
         return Promise.reject(error);
     }
 }
