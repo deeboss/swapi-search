@@ -27,7 +27,7 @@ const SearchInput = styled(AsyncTypeahead)`
         a {
             display: block;
             padding: 12px 6px;
-            color: inherit;
+            color: #000000;
             text-decoration: none;
 
             &:hover {
