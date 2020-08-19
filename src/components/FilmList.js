@@ -20,7 +20,7 @@ const Item = styled.li`
 `
 
 
-const FilmCard = (films) => {
+const FilmList = (films) => {
 
     // const [ films ] = useState(films);
 
@@ -44,4 +44,4 @@ const FilmCard = (films) => {
     )
 }
 
-export default FilmCard;
+export default FilmList;

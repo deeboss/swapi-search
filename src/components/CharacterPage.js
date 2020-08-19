@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getSpeciesInfo, getHomeworldInfo, getFilmInfo } from '../lib/api';
 import styled from "styled-components";
 
-import FilmCard from './FilmCard';
+import FilmList from './FilmList';
 
 const Title = styled.h1`
 
@@ -92,7 +92,7 @@ const CharacterPage = ({match}) => {
             <hr />
             <div>
                 <h4>Films appeared in:</h4>
-                { characterDetails.films ? <FilmCard films={characterDetails.films}/> : <p>Loading...</p> }
+                { characterDetails.films ? <FilmList films={characterDetails.films}/> : <p>Loading...</p> }
             </div>
 
             <Footnote>ID number: {match.params.id}</Footnote>
