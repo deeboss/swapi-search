@@ -74,11 +74,11 @@ const SearchBar = ({options, setOptions}) => {
             <SearchInput
                 id="characterSearch"
                 isLoading={isLoading}
-                // labelKey={(option) => `${option.name}`}
-                minLength={2}
+                labelKey={(option) => `${option.name}`}
+                minLength={1}
                 onSearch={handleSearch}
                 // onChange={handleChange}
-                // options={options}
+                options={options}
                 ref={ref}
                 placeholder="Search for a Star Wars character..."
                 // renderMenuItemChildren={(option) => (

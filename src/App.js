@@ -7,7 +7,7 @@ import CharacterPage from './components/CharacterPage';
 
 const Wrapper = styled.div`
   padding: 4em 20px;
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
   margin: auto;
 `

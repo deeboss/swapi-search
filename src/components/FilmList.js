@@ -13,7 +13,7 @@ const List = styled.ul`
 
 const Item = styled.li`
     list-style-type: none;
-    width: calc(50% - 10px);
+    width: calc(33.33% - 10px);
     padding: 15px;
     margin-bottom: 15px;
     background: rgba(255,255,255,0.05);
@@ -33,11 +33,11 @@ const FilmList = (films) => {
         <Fragment>
             <List>
                 {films.films.map(film => (
-                        <Item key={film.title}>
-                            <h3>{film.title}</h3>
-                            <p>Release date: {film.release_date}</p>
-                            <p>{film.clipped_opening_crawl}</p>
-                        </Item>
+                    <Item key={film.title}>
+                        <h3>{film.title}</h3>
+                        <p>Release date: {film.release_date}</p>
+                        <p>{film.clipped_opening_crawl}</p>
+                    </Item>
                 ))}
             </List>
         </Fragment>
