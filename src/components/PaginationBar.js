@@ -1,5 +1,42 @@
 import React, { Fragment, useEffect } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+
+const MenuBar = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+`
+
+const Container = styled.div`
+
+`
+
+const Button = styled.span`
+    display: inline-block;
+    cursor: pointer;
+
+    &:first-of-type {
+        svg {
+            margin-right: 10px;
+        }
+    }
+
+    &:last-of-type {
+        margin-left: 20px;
+
+        svg {
+            margin-left: 8px;
+        }
+    }
+
+    svg {
+        pointer-events: none;
+    }
+`
 
 const PaginationBar = ({pageOptions, setQuery}) => {
 
@@ -18,8 +55,23 @@ const PaginationBar = ({pageOptions, setQuery}) => {
 
     return (
         <Fragment>
-            { pageOptions.previous && <button id="previous" onClick={handleClick}>Prev</button> }
-            { pageOptions.next && <button id="next" onClick={handleClick}>Next</button> }
+            <MenuBar>
+                <Container>{ pageOptions.count && <p>{pageOptions.count} <span>results</span></p> }</Container>
+                <Container>
+                    { pageOptions.previous &&
+                        <Button id="previous" onClick={handleClick}>
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                            Prev
+                        </Button>
+                    }
+                    { pageOptions.next &&
+                        <Button id="next" onClick={handleClick}>
+                            Next
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </Button>
+                    }
+                </Container>
+            </MenuBar>
         </Fragment>
     )
 }
