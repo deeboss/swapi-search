@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
@@ -19,6 +19,10 @@ const Button = styled.span`
     display: inline-block;
     cursor: pointer;
 
+    svg {
+        pointer-events: none;
+    }
+
     &:first-of-type {
         svg {
             margin-right: 10px;
@@ -33,14 +37,22 @@ const Button = styled.span`
         }
     }
 
-    svg {
+    &[disabled] {
+        opacity: 0.5;
         pointer-events: none;
     }
 `
 
 const PaginationBar = ({pageOptions, setQuery}) => {
 
+    const [ disableNext, setDisableNext ] = useState(true);
+    const [ disablePrevious, setDisablePrevious ] = useState(true);
+
     useEffect(() => {
+        console.log(pageOptions);
+
+        setDisableNext(pageOptions.next ? false : true);
+        setDisablePrevious(pageOptions.previous ? false : true);
 
     }, [pageOptions]);
 
@@ -55,23 +67,21 @@ const PaginationBar = ({pageOptions, setQuery}) => {
 
     return (
         <Fragment>
-            <MenuBar>
-                <Container>{ pageOptions.count && <p>{pageOptions.count} <span>results</span></p> }</Container>
-                <Container>
-                    { pageOptions.previous &&
-                        <Button id="previous" onClick={handleClick}>
+            { pageOptions.count && 
+                <MenuBar>
+                    <Container><p>{pageOptions.count} <span>results</span></p></Container>
+                    <Container>
+                        <Button id="previous" onClick={handleClick} disabled={disablePrevious}>
                             <FontAwesomeIcon icon={faChevronLeft} />
                             Prev
                         </Button>
-                    }
-                    { pageOptions.next &&
-                        <Button id="next" onClick={handleClick}>
+                        <Button id="next" onClick={handleClick} disabled={disableNext}>
                             Next
                             <FontAwesomeIcon icon={faChevronRight} />
                         </Button>
-                    }
-                </Container>
-            </MenuBar>
+                    </Container>
+                </MenuBar>
+            }
         </Fragment>
     )
 }
