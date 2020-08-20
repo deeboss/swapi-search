@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { checkIfEmptyArr } from '../lib/util';
 
-export const getCharacterSearchResults = async (query) => {
+export const getCharacterSearchResults = async (query, page = '1') => {
     try {
-        const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
+        const response = await axios.get(`https://swapi.dev/api/people/?search=${query}&page=${page}`)
         const results = response.data.results;
         // For pagination
-        // const { count, next, previous } = response.data;
+        const { count, next, previous } = response.data;
         const promises = results.map((i) => {
             // Get ID of character for dynamic character page rendering
             const id = i.url.split('/')[5];
@@ -18,7 +18,8 @@ export const getCharacterSearchResults = async (query) => {
             }
         });
 
-        return await Promise.all(promises);
+        const resolvedPromises = await Promise.all(promises);
+        return [resolvedPromises, {count, next, previous}];
 
     } catch (error) {
         console.error(error);

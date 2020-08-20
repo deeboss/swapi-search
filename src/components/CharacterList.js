@@ -18,10 +18,14 @@ const List = styled.ul`
 const Card = styled.li`
     cursor: pointer;
     list-style-type: none;
-    width: calc(33.33% - 10px);
-    padding: 15px;
-    margin-bottom: 15px;
+    width: calc(50% - 10px);
+    padding: 2em;
+    margin-bottom: 2em;
     background: rgba(255,255,255,0.05);
+`
+
+const SpeciesText = styled.span`
+    margin-left: 5px;
 `
 
 const CharacterList = ({options}) => {
@@ -37,7 +41,7 @@ const CharacterList = ({options}) => {
                 {options.map(character => (
                     <Card key={character.id} onClick={() => handleClick(character.id)}>
                         <Title>{character.name}
-                            { character.species && <span>({character.species})</span> }
+                            { character.species && <SpeciesText>({character.species})</SpeciesText> }
                         </Title>
                         { character.homeworld_name &&
                             <p><small>From {character.homeworld_name} (population: {character.homeworld_population})</small></p>

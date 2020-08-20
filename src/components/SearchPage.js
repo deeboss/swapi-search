@@ -1,23 +1,21 @@
 import React, { Fragment, useState } from "react";
-import styled from "styled-components";
 
 import SearchBar from './SearchBar';
 import CharacterList from './CharacterList';
-
-const Title = styled.h1`
-    color: white;
-    text-align: center;
-`
+import PaginationBar from './PaginationBar';
 
 const SearchPage = () => {
     const [ options, setOptions ] = useState([]);
+    const [ pageOptions, setPageOptions ] = useState([]);
+    const [ query, setQuery ] = useState();
 
     return (
         <Fragment>
-            <Title>Swapi Search</Title>
-            <SearchBar setOptions={setOptions} options={options}/>
+            <SearchBar
+                setOptions={setOptions} options={options} setPageOptions={setPageOptions} query={query}/>
             <br /><br /><br /><br /><br /><br />
             <CharacterList options={options}/>
+            { pageOptions && <PaginationBar pageOptions={pageOptions} setQuery={setQuery}/> }
         </Fragment>
     )
 }

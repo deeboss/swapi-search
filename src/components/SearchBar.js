@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { getCharacterSearchResults, getSpeciesInfo, getHomeworldInfo } from '../lib/api';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import styled from "styled-components";
+
+import { getCharacterSearchResults, getSpeciesInfo, getHomeworldInfo } from '../lib/api';
 
 const SearchInput = styled(AsyncTypeahead)`
     input {
@@ -40,22 +41,23 @@ const SearchInput = styled(AsyncTypeahead)`
     }
 `
 
-const SearchBar = ({options, setOptions}) => {  
+const SearchBar = ({options, setOptions, setPageOptions, query}) => {  
     const ref = useRef();
-    const [isLoading, setIsLoading] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false);
 
     // Focus on search bar on render for better UX
     useEffect(()=>{
         ref.current.focus();
     }, []);
 
-    const handleSearch = async (query) => {
+    const handleSearch = async (query, page) => {
         setIsLoading(true); 
-        let options = await getCharacterSearchResults(query);
-        setOptions(options);
+        let options = await getCharacterSearchResults(query, page);
+        setOptions(options[0]);
+        setPageOptions(options[1]);
         setIsLoading(false);
 
-        const moreInfoRequests = options.map(async (i) => {
+        const moreInfoRequests = options[0].map(async (i) => {
             try {
                 const species = await getSpeciesInfo(i.species_url);
                 const homeworld = await getHomeworldInfo(i.homeworld_url);
@@ -73,9 +75,15 @@ const SearchBar = ({options, setOptions}) => {
             }
         })
 
-        options = await Promise.all(moreInfoRequests);
-        setOptions(options);
+        options[0] = await Promise.all(moreInfoRequests);
+        setOptions(options[0]);
     };
+
+    useEffect(() => {
+        if (query) {
+            handleSearch(query.term, query.page);
+        }
+    }, [query])
     
     return (
         <Fragment>
@@ -87,7 +95,7 @@ const SearchBar = ({options, setOptions}) => {
                 onSearch={handleSearch}
                 options={options}
                 ref={ref}
-                placeholder="Search for a Star Wars character..."
+                placeholder="Type to search for a Star Wars character"
                 />
         </Fragment>
     )
