@@ -10,19 +10,28 @@ const Title = styled.h1`
 
 `
 
+const SpeciesText = styled.span`
+    margin-left: 8px;
+`
+
 const CharacterPage = ({match}) => {
 
     const [ characterDetails, setCharacterDetails ] = useState({})
 
     const handleCharacterRequest = async (id) => {
-        let characterDetails = await getCharacterInfo(id);
-        setCharacterDetails(characterDetails);
-
-        characterDetails = await retrieveBasicCharacterInfo(characterDetails);
-        setCharacterDetails(characterDetails);
-
-        const films = await retrieveFilmDetails(characterDetails);
-        setCharacterDetails({...characterDetails, films: films});
+        try {
+            let characterDetails = await getCharacterInfo(id);
+            setCharacterDetails(characterDetails);
+    
+            characterDetails = await retrieveBasicCharacterInfo(characterDetails);
+            setCharacterDetails(characterDetails);
+    
+            const films = await retrieveFilmDetails(characterDetails);
+            setCharacterDetails({...characterDetails, films: films});
+        } catch (error) {
+            console.error(error);
+            return Promise.reject(error);
+        }
     }
 
     useEffect(() => {
@@ -35,7 +44,7 @@ const CharacterPage = ({match}) => {
                 {characterDetails.name}
 
                 { characterDetails.species &&
-                    <span>({characterDetails.species})</span>
+                    <SpeciesText>({characterDetails.species})</SpeciesText>
                 }
             </Title>
             { characterDetails.homeworld_name &&

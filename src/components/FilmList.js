@@ -15,6 +15,7 @@ const Item = styled.li`
     list-style-type: none;
     width: calc(33.33% - 10px);
     padding: 15px;
+    text-align: center;
     margin-bottom: 15px;
     background: rgba(255,255,255,0.05);
 `

@@ -14,8 +14,8 @@ const SearchPage = () => {
             <SearchBar
                 setOptions={setOptions} options={options} setPageOptions={setPageOptions} query={query}/>
             <br /><br /><br /><br /><br /><br />
-            <CharacterList options={options}/>
             { pageOptions && <PaginationBar pageOptions={pageOptions} setQuery={setQuery}/> }
+            <CharacterList options={options}/>
         </Fragment>
     )
 }
