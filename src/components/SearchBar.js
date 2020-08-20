@@ -44,21 +44,37 @@ const SearchBar = ({options, setOptions}) => {
     const ref = useRef();
     const [isLoading, setIsLoading] = useState(false);
 
-    // Focus on search bar onComponentMount for better UX
+    // Focus on search bar on render for better UX
     useEffect(()=>{
         ref.current.focus();
     }, []);
 
     const handleSearch = async (query) => {
-        setIsLoading(true);
-        const options = await getCharacterSearchResults(query);
+        setIsLoading(true); 
+        let options = await getCharacterSearchResults(query);
         setOptions(options);
-
-        // const otherDetails = options.map(async (i) => {
-        //     const homeworld_details = await getHomeworldInfo(i.homeworld_url);
-        //     const species_details = await getSpeciesInfo(i.species_url); 
-        // });
         setIsLoading(false);
+
+        const moreInfoRequests = options.map(async (i) => {
+            try {
+                const species = await getSpeciesInfo(i.species_url);
+                const homeworld = await getHomeworldInfo(i.homeworld_url);
+                return {
+                    name: i.name,
+                    id: i.id,
+                    homeworld_name: homeworld.name,
+                    homeworld_population: homeworld.population,
+                    species: species.name
+                }
+            } catch (error) {
+                console.log("there's an error with moreInfo");
+                console.error(error);
+                return Promise.reject(error);
+            }
+        })
+
+        options = await Promise.all(moreInfoRequests);
+        setOptions(options);
     };
     
     return (
