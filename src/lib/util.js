@@ -7,6 +7,21 @@ export const checkIfEmptyArr = (arr) => {
     return true;
 }
 
+export const sortByDescending = (obj) => {
+    // Strip out hyphens from 'release_date',
+    // Convert from string to integer, store as 'converted'
+    obj.map((i) => {
+        i.converted = Number(i.release_date.replace(/-/g, ""));
+    })
+
+    // Sort by descending order based on value of 'converted'
+    obj.sort((a, b) => {
+        return b.converted - a.converted;
+    });
+    
+    return obj
+}
+
 export const retrieveBasicCharacterInfo = async (data) => {
     try {
         const species = await getSpeciesInfo(data.species_url);

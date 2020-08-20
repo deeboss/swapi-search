@@ -33,17 +33,24 @@ const CharacterPage = ({match}) => {
         <Fragment>
             <Title>
                 {characterDetails.name}
+
+                { characterDetails.species &&
+                    <span>({characterDetails.species})</span>
+                }
             </Title>
-            <p>
-                From {characterDetails.homeworld} (population: {characterDetails.homeworld_population})
-            </p>
-            <p>
-                {characterDetails.species}
-            </p>
-            <hr />
+            { characterDetails.homeworld_name &&
+                <p>From {characterDetails.homeworld_name} (population: {characterDetails.homeworld_population})</p>
+            }
             <div>
-                <h4>Films appeared in:</h4>
-                { characterDetails.films ? <FilmList films={characterDetails.films}/> : <p>Loading...</p> }
+                { characterDetails.films_arr &&
+                    <Fragment>
+                        <hr />
+                        <h4>Films appeared in:</h4>
+                        <div>
+                            { characterDetails.films ? <FilmList films={characterDetails.films}/> : <p>Loading...</p> }
+                        </div>
+                    </Fragment>
+                }
             </div>
         </Fragment>
     )

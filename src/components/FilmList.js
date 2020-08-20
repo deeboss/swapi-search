@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
-
+import { sortByDescending } from '../lib/util'
 
 const List = styled.ul`
     padding: 0;
@@ -23,21 +23,6 @@ const Item = styled.li`
 const FilmList = (data) => {
     const [ sortedFilms, setSortedFilms ] = useState({});
     const [ isFinishedSorting, setIsFinishgSorting ] = useState(false);
-
-    const sortByDescending = (obj) => {
-        // Strip out hyphens from 'release_date',
-        // Convert from string to integer,
-        // Return object sorted by descending order of 'converted'
-        obj.map((i) => {
-            i.converted = Number(i.release_date.replace(/-/g, ""));
-        })
-
-        obj.sort((a, b) => {
-            return b.converted - a.converted;
-        });
-        
-        return obj
-    }
 
     useEffect(() => {
         if (data) {

@@ -1,6 +1,10 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+
+const Title = styled.h3`
+    margin-top: 0;
+`
 
 const List = styled.ul`
     padding: 0;
@@ -32,8 +36,12 @@ const CharacterList = ({options}) => {
             <List>    
                 {options.map(character => (
                     <Card key={character.id} onClick={() => handleClick(character.id)}>
-                        <h3>{character.name} ({character.species})</h3>
-                        <p><small>From {character.homeworld} (population: {character.homeworld_population})</small></p>
+                        <Title>{character.name}
+                            { character.species && <span>({character.species})</span> }
+                        </Title>
+                        { character.homeworld_name &&
+                            <p><small>From {character.homeworld_name} (population: {character.homeworld_population})</small></p>
+                        }
                     </Card>
                 ))}
             </List>
