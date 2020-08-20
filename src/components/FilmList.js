@@ -18,6 +18,12 @@ const Item = styled.li`
     text-align: center;
     margin-bottom: 15px;
     background: rgba(255,255,255,0.05);
+    color: #ffe81f;
+`
+
+const FilmTitle = styled.h2`
+    text-transform: uppercase;
+    font-weight: bold;
 `
 
 
@@ -31,6 +37,10 @@ const FilmList = (data) => {
             setIsFinishgSorting(true);
         }
     }, [data])
+
+    const handleHover = (thing) => {
+        console.log(thing);
+    }
     
     return (
         <Fragment>
@@ -38,7 +48,7 @@ const FilmList = (data) => {
                 { isFinishedSorting &&
                     sortedFilms.map(film => (
                         <Item key={film.title}>
-                            <h3>{film.title}</h3>
+                            <FilmTitle>{film.title}</FilmTitle>
                             <p>Release date: {film.release_date}</p>
                             <p>{film.clipped_opening_crawl}</p>
                         </Item>

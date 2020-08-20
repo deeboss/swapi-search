@@ -4,6 +4,14 @@ import styled from "styled-components";
 
 import { getCharacterSearchResults, getSpeciesInfo, getHomeworldInfo } from '../lib/api';
 
+const Title = styled.h1`
+    text-align: center;
+    color: #ffe81f;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 3.5rem;
+`
+
 const SearchInput = styled(AsyncTypeahead)`
     input {
         padding: 8px 6px;
@@ -89,6 +97,7 @@ const SearchBar = ({options, setOptions, setPageOptions, query}) => {
     
     return (
         <Fragment>
+            <Title>SWAPI SEARCH</Title>
             <SearchInput
                 id="characterSearch"
                 isLoading={isLoading}

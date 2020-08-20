@@ -62,9 +62,13 @@ const PaginationBar = ({pageOptions, setQuery}) => {
         });
     }
 
+    useEffect(() => {
+        console.log("Page Options Count:")
+    }, [])
+
     return (
         <Fragment>
-            { pageOptions.count && 
+            { pageOptions.count ? 
                 <MenuBar>
                     <Container><p>{pageOptions.count} <span>results</span></p></Container>
                     <Container>
@@ -78,6 +82,7 @@ const PaginationBar = ({pageOptions, setQuery}) => {
                         </Button>
                     </Container>
                 </MenuBar>
+            : <></>
             }
         </Fragment>
     )
