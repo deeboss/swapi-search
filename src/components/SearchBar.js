@@ -16,6 +16,7 @@ const SearchInput = styled(AsyncTypeahead)`
     }
 
     .dropdown-menu {
+        display: none!important;
         z-index: 5;
         box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
         border-radius: 2px;
@@ -48,6 +49,7 @@ const SearchBar = ({options, setOptions, setPageOptions, query}) => {
     // Focus on search bar on render for better UX
     useEffect(()=>{
         ref.current.focus();
+        console.log(query);
     }, []);
 
     const handleSearch = async (query, page) => {

@@ -45,15 +45,12 @@ const Button = styled.span`
 
 const PaginationBar = ({pageOptions, setQuery}) => {
 
-    const [ disableNext, setDisableNext ] = useState(true);
-    const [ disablePrevious, setDisablePrevious ] = useState(true);
+    const [ isNextDisabled, setIsNextDisabled ] = useState(true);
+    const [ isPreviousDisabled, setIsPreviousDisabled ] = useState(true);
 
     useEffect(() => {
-        console.log(pageOptions);
-
-        setDisableNext(pageOptions.next ? false : true);
-        setDisablePrevious(pageOptions.previous ? false : true);
-
+        setIsNextDisabled(pageOptions.next ? false : true);
+        setIsPreviousDisabled(pageOptions.previous ? false : true);
     }, [pageOptions]);
 
     const handleClick = (e) => {
@@ -71,11 +68,11 @@ const PaginationBar = ({pageOptions, setQuery}) => {
                 <MenuBar>
                     <Container><p>{pageOptions.count} <span>results</span></p></Container>
                     <Container>
-                        <Button id="previous" onClick={handleClick} disabled={disablePrevious}>
+                        <Button id="previous" onClick={handleClick} disabled={isPreviousDisabled}>
                             <FontAwesomeIcon icon={faChevronLeft} />
                             Prev
                         </Button>
-                        <Button id="next" onClick={handleClick} disabled={disableNext}>
+                        <Button id="next" onClick={handleClick} disabled={isNextDisabled}>
                             Next
                             <FontAwesomeIcon icon={faChevronRight} />
                         </Button>
