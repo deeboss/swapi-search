@@ -43,13 +43,16 @@ export const getCharacterInfo = async (id) => {
 
 export const getSpeciesInfo = async (url) => {
     try {
-        if (!checkIfEmptyArr(url)) {
+        if (!url) {
             return {}
         }
+        // if (!checkIfEmptyArr(url)) {
+        //     return {}
+        // }
         const response = await axios.get(`${url}`)
         const data = response.data
         return {
-            species: data.name,
+            name: data.name,
         }
     } catch (error) {
         console.log("there's an error with the getSpeciesInfo");
