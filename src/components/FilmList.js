@@ -25,6 +25,9 @@ const FilmList = (data) => {
     const [ isFinishedSorting, setIsFinishgSorting ] = useState(false);
 
     const sortByDescending = (obj) => {
+        // Strip out hyphens from 'release_date',
+        // Convert from string to integer,
+        // Return object sorted by descending order of 'converted'
         obj.map((i) => {
             i.converted = Number(i.release_date.replace(/-/g, ""));
         })

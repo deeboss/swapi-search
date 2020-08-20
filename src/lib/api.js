@@ -30,9 +30,12 @@ export const getCharacterInfo = async (id) => {
     try {
         const response = await axios.get(`https://swapi.dev/api/people/${id}`);
         const data = response.data
-        const name = data.name;
         return {
-            name: name
+            name: data.name,
+            id,
+            homeworld_url: data.homeworld,
+            species_url: data.species[0],
+            films_arr: data.films
         }
     } catch (error) {
         console.log("there's an error with the getCharacterInfo");
