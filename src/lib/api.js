@@ -1,23 +1,27 @@
 import axios from 'axios';
 
-export const getCharacterSearchResults = async (query, page = '1') => {
-    const response = await axios.get(`https://swapi.dev/api/people/?search=${query}&page=${page}`)
-    const { count } = response.data;
-    const results = response.data.results;
+export const searchCharacter = async (query) => {
+    const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
+    const { results, count, next, previous } = response.data;
+    const characters = results.map((result) => ({
+        name: result.name,
+        id: result.url.split('/')[5],
+        homeworld_url: result.homeworld,
+        species_url: result.species[0]
+    }));
+    return { characters, count, next, previous };
+}
 
-    const promises = results.map((i) => {
-        // Get ID of character for dynamic character page rendering
-        const id = i.url.split('/')[5];
-        return {
-            name: i.name,
-            id: id,
-            homeworld_url: i.homeworld,
-            species_url: i.species[0]
-        }
-    });
-
-    const resolvedPromises = await Promise.all(promises);
-    return [resolvedPromises, count];
+export const getPageResults = async (pageUrl) => {
+    const response = await axios.get(pageUrl)
+    const { results, next, previous } = response.data;
+    const characters = results.map((result) => ({
+        name: result.name,
+        id: result.url.split('/')[5],
+        homeworld_url: result.homeworld,
+        species_url: result.species[0]
+    }));
+    return { characters, next, previous };
 }
 
 export const getCharacterInfo = async (id) => {
