@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
@@ -12,7 +12,6 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import FilmList from './FilmList';
 
 const CharacterPage = ({match}) => {
-    const testRef = useRef();
 
     const [ isLoading, setIsLoading ] = useState();
     const [ character, setCharacter ] = useState();
@@ -25,23 +24,6 @@ const CharacterPage = ({match}) => {
     const handleClose = () => {
         history.push(`/`);
     }
-
-    // const handleCharacterRequestArchive = async (id) => {
-    //     try {
-    //         setIsLoading(true);
-    //         let characterDetails = await getCharacterInfo(id);
-    //         setCharacterDetails(characterDetails);
-    //         setIsLoading(false);
-    
-    //         characterDetails = await retrieveBasicCharacterInfo(characterDetails);
-    //         setCharacterDetails(characterDetails);
-    
-    //         const film = await retrieveFilmDetails(characterDetails);
-    //         setCharacterDetails({...characterDetails, film: film});
-    //     } catch (error) {
-    //         history.push(`/404`);
-    //     }
-    // }
 
     const handleCharacterRequest = async (id) => {
         try {
@@ -90,10 +72,6 @@ const CharacterPage = ({match}) => {
             handleMultipleFilmRequest(character);
         }
     }, [character]);
-
-    // useEffect(()=> {
-    //     console.log(testRef);
-    // })
 
     return (
         <>

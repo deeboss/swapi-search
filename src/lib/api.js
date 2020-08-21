@@ -21,6 +21,7 @@ export const getCharacterSearchResults = async (query, page = '1') => {
 }
 
 export const getCharacterInfo = async (id) => {
+    if (!id) { return {} }
     const response = await axios.get(`https://swapi.dev/api/people/${id}`);
     const data = response.data
     return {
@@ -33,9 +34,7 @@ export const getCharacterInfo = async (id) => {
 }
 
 export const getSpeciesInfo = async (url) => {
-    if (!url) {
-        return {}
-    }
+    if (!url) { return {} }
     const response = await axios.get(`${url}`)
     const data = response.data
     return {
@@ -44,6 +43,7 @@ export const getSpeciesInfo = async (url) => {
 }
 
 export const getHomeworldInfo = async (url) => {
+    if (!url) { return {} }
     const response = await axios.get(`${url}`)
     const data = response.data
 
@@ -59,6 +59,7 @@ export const getHomeworldInfo = async (url) => {
 }
 
 export const getFilmInfo = async (url) => {
+    if (!url) { return {} }
     const response = await axios.get(`${url}`)
     const data = response.data
     // Clip opening crawl to first 150 characters
