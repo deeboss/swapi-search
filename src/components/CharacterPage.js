@@ -16,7 +16,7 @@ const CharacterPage = ({match}) => {
     const [ isLoading, setIsLoading ] = useState();
     const [ character, setCharacter ] = useState();
     const [ homeworld, setHomeworld ] = useState({});
-    const [ species, setSpecies ] = useState({});
+    const [ species, setSpecies ] = useState();
     const [ films, setFilms ] = useState({});
 
     const history = useHistory();
@@ -36,18 +36,26 @@ const CharacterPage = ({match}) => {
         }
     }
 
-    const handleHomeworldAndSpeciesRequest = async (data) => {
-        try {
-            const { homeworld_url, species_url } = data;
-            const homeworldResults = await getHomeworldInfo(homeworld_url);
-            const speciesResults = await getSpeciesInfo(species_url);
-            setHomeworld(homeworldResults);
-            setSpecies(speciesResults);
-        } catch (error) {
-            console.error(error);
-            return
-        }
+    const handleHomeworldRequest = async (data) => {
+      try {
+        const { homeworld_url } = data;
+        const results = await getHomeworldInfo(homeworld_url);
+        setHomeworld(results);
+      } catch (error) {
+        console.error(error);
+      }
     }
+
+    const handleSpeciesRequest = async (data) => {
+        try {
+          const { species_url } = data;
+          const { name } = await getSpeciesInfo(species_url);
+          setSpecies(name);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    
 
     const handleMultipleFilmRequest = async (data) => {
         try {
@@ -68,7 +76,8 @@ const CharacterPage = ({match}) => {
 
     useEffect(()=>{
         if (character) {
-            handleHomeworldAndSpeciesRequest(character);
+            handleHomeworldRequest(character);
+            handleSpeciesRequest(character);
             handleMultipleFilmRequest(character);
         }
     }, [character]);
@@ -82,8 +91,8 @@ const CharacterPage = ({match}) => {
                         { character && 
                             <Title>
                                 {character.name}
-                                { species.name &&
-                                    <SpeciesText>({species.name})</SpeciesText>
+                                { species &&
+                                    <SpeciesText>({species})</SpeciesText>
                                 }
                             </Title>
                         }
