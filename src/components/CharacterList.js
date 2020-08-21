@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 import CharacterCard from "./CharacterCard";
 
-const CharacterList = ({options}) => {    
+const CharacterList = ({characters}) => {    
 
     return (
         <>
             <List>    
-                {options.map(character => (
+                {characters.map(character => (
                     <CharacterCard
                         key={character.id}
                         character={character}

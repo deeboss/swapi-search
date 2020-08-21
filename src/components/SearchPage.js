@@ -4,12 +4,12 @@ import SearchBar from './SearchBar';
 import CharacterList from './CharacterList';
 
 const SearchPage = () => {
-    const [ options, setOptions ] = useState([]);
+    const [ characters, setCharacters ] = useState([]);
 
     return (
         <>
-            <SearchBar setOptions={setOptions} options={options}/>
-            <CharacterList options={options}/>
+            <SearchBar setCharacters={setCharacters}/>
+            <CharacterList characters={characters}/>
         </>
     )
 }

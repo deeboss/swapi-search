@@ -6,83 +6,90 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
-import { getCharacterSearchResults } from '../lib/api';
+import { searchCharacter, getPageResults} from '../lib/api';
 
-const SearchBar = ({options, setOptions }) => {  
+const SearchBar = ({ setCharacters }) => {
     const ref = useRef();
     const [ isLoading, setIsLoading ] = useState(false);
-    const [ currentPage, setCurrentPage ] = useState();
-    const [ numOfPages, setNumOfPages ] = useState();
-    const [ count, setCount ] = useState();
-    const [ query, setQuery ] = useState();
+    const [ currentPage, setCurrentPage ] = useState(1);
+    const [ searchResultCount, setSearchResultCount ] = useState(0);
+    const [ nextPageUrl, setNextPageUrl ] = useState('');
+    const [ prevPageUrl, setPrevPageUrl ] = useState('');
 
     // Focus on search bar on render for better UX
     useEffect(()=>{
         ref.current.focus();
     }, []);
 
-    useEffect(() => {
-        const initSearch = async () => {
-            try {
-                const [ options ] = await getCharacterSearchResults(query, currentPage);
-                setOptions(options);
-            } catch (error) {
-
-            }
+    const handlePageChange = async (event) => {
+        let pageResults
+        if (event.target.id === 'next') {
+            setCurrentPage(currentPage + 1)
+            pageResults = await getPageResults(nextPageUrl)
+        } else {
+            setCurrentPage(currentPage - 1)
+            pageResults = await getPageResults(prevPageUrl)
         }
-        initSearch();
-    }, [currentPage]);
+        setCharacters(pageResults.characters)
+        setNextPageUrl(pageResults.next)
+        setPrevPageUrl(pageResults.previous)
+    }
 
-    const handleChangePage = (e) => {
-        if (e.target.id === 'next') {
-            setCurrentPage(currentPage => currentPage + 1);
-        } else if (e.target.id === 'previous') {
-            setCurrentPage(currentPage => currentPage - 1);
+    const handleNewSearch = async (query) => {
+        setIsLoading(true);
+        // reset current page to 1 on new query
+        setCurrentPage(1)
+        const searchResults = await searchCharacter(query);
+        setCharacters(searchResults.characters);
+        setSearchResultCount(searchResults.count);
+        setNextPageUrl(searchResults.next)
+        setPrevPageUrl(searchResults.previous)
+        setIsLoading(false);
+    };
+
+    // If query is empty, empty the results
+    const checkEmpty = (query) => {
+        if (!query) {
+            setSearchResultCount(0)
+            setCharacters([])
         }
     }
 
-    const handleSearch = async (query, page) => {
-        setQuery(query);
-        setIsLoading(true); 
-
-        let [ options, count ] = await getCharacterSearchResults(query, page);
-        setOptions(options);
-        setIsLoading(false);
-        setCount(count);
-        const numOfPages = Math.round(Math.ceil(count / 10));
-        setNumOfPages(numOfPages);
-        setCurrentPage(1);
-    };
-    
     return (
         <>
             <Title>SWAPI SEARCH</Title>
             <SearchInput
+                placeholder="Type to search for a Star Wars character"
                 id="characterSearch"
                 isLoading={isLoading}
-                labelKey={(option) => `${option.name}`}
+                labelKey={option => option.name}
+                onSearch={handleNewSearch}
+                onInputChange={checkEmpty}
                 minLength={1}
-                onSearch={handleSearch}
-                options={options}
+                useCache={false}
+                open={false}
                 ref={ref}
-                placeholder="Type to search for a Star Wars character"
             />
-                { count ? <MenuBar>
-                    <Container><p>{count} <span>results</span></p></Container>
+            { !!searchResultCount &&
+                <MenuBar>
+                    <Container><p>{searchResultCount} <span>results</span></p></Container>
                     <Container>
-                        { currentPage > 1 &&
-                            <Button id="previous" onClick={handleChangePage}>
+                        { currentPage }
+                        { prevPageUrl &&
+                            <Button id="previous" onClick={handlePageChange}>
                                 <FontAwesomeIcon icon={faChevronLeft} />
                                 Prev
-                            </Button> }
-                        { currentPage < numOfPages &&
-                            <Button id="next" onClick={handleChangePage}>
+                            </Button>
+                        }
+                        { nextPageUrl &&
+                            <Button id="next" onClick={handlePageChange}>
                                 Next
                                 <FontAwesomeIcon icon={faChevronRight} />
-                            </Button> }
+                            </Button>
+                        }
                     </Container>
                 </MenuBar>
-                : <></> }
+            }
         </>
     )
 }
@@ -110,7 +117,6 @@ const SearchInput = styled(AsyncTypeahead)`
     }
 
     .dropdown-menu {
-        display: none!important;
         z-index: 5;
         box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
         border-radius: 2px;
