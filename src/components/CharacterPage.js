@@ -1,15 +1,143 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
-import { getCharacterInfo } from '../lib/api';
-import { retrieveBasicCharacterInfo, retrieveFilmDetails } from '../lib/util';
+import { getCharacterInfo, getHomeworldInfo, getSpeciesInfo, getFilmInfo } from '../lib/api';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 
 
 import FilmList from './FilmList';
+
+const CharacterPage = ({match}) => {
+    const testRef = useRef();
+
+    const [ isLoading, setIsLoading ] = useState();
+    const [ character, setCharacter ] = useState();
+    const [ homeworld, setHomeworld ] = useState({});
+    const [ species, setSpecies ] = useState({});
+    const [ films, setFilms ] = useState({});
+
+    const history = useHistory();
+
+    const handleClose = () => {
+        history.push(`/`);
+    }
+
+    // const handleCharacterRequestArchive = async (id) => {
+    //     try {
+    //         setIsLoading(true);
+    //         let characterDetails = await getCharacterInfo(id);
+    //         setCharacterDetails(characterDetails);
+    //         setIsLoading(false);
+    
+    //         characterDetails = await retrieveBasicCharacterInfo(characterDetails);
+    //         setCharacterDetails(characterDetails);
+    
+    //         const film = await retrieveFilmDetails(characterDetails);
+    //         setCharacterDetails({...characterDetails, film: film});
+    //     } catch (error) {
+    //         history.push(`/404`);
+    //     }
+    // }
+
+    const handleCharacterRequest = async (id) => {
+        try {
+            setIsLoading(true);
+            const results = await getCharacterInfo(id);
+            setCharacter(results);
+            setIsLoading(false);
+        } catch (error) {
+            history.push(`/404`);
+        }
+    }
+
+    const handleHomeworldAndSpeciesRequest = async (data) => {
+        try {
+            const { homeworld_url, species_url } = data;
+            const homeworldResults = await getHomeworldInfo(homeworld_url);
+            const speciesResults = await getSpeciesInfo(species_url);
+            setHomeworld(homeworldResults);
+            setSpecies(speciesResults);
+        } catch (error) {
+            console.error(error);
+            return
+        }
+    }
+
+    const handleMultipleFilmRequest = async (data) => {
+        try {
+            const { films_url } = data;
+            const result = await Promise.all(films_url.map((url) => {
+                return getFilmInfo(url);
+            }));
+            setFilms(result);
+        } catch (error) {
+            console.error(error);
+            return
+        }
+    }
+    
+    useEffect(() => {
+        handleCharacterRequest(match.params.id);
+    }, [])
+
+    useEffect(()=>{
+        if (character) {
+            handleHomeworldAndSpeciesRequest(character);
+            handleMultipleFilmRequest(character);
+        }
+    }, [character]);
+
+    // useEffect(()=> {
+    //     console.log(testRef);
+    // })
+
+    return (
+        <>
+        { !isLoading ?
+            <Wrapper>
+                <Header>
+                    <Container>
+                        { character && 
+                            <Title>
+                                {character.name}
+                                { species.name &&
+                                    <SpeciesText>({species.name})</SpeciesText>
+                                }
+                            </Title>
+                        }
+                        { homeworld.name &&
+                            <Subtitle>From {homeworld.name} (population: {homeworld.population})</Subtitle>
+                        }
+                    </Container>
+                    <Container>
+                        <CloseButton onClick={handleClose}>
+                            <FontAwesomeIcon icon={faTimes} size="lg" />
+                        </CloseButton>
+                    </Container>
+                </Header>
+                <Container>
+                    { films[0] &&
+                        <>
+                            <h4>Films appeared in:</h4>
+                            <div>
+                                { films && <FilmList films={films}/> }
+                            </div>
+                        </>
+                    }
+                </Container>
+            </Wrapper>
+            : <Loader><FontAwesomeIcon icon={faCircleNotch} size='6x' spin/></Loader>
+        }
+        </>
+    )
+}
+
+export default CharacterPage;
+
 
 const Header = styled.div`
     display: flex;
@@ -34,8 +162,18 @@ const CloseButton = styled.span`
         background: rgba(255,255,255,0.12);
     }
 `
+const Wrapper = styled.div``
 
 const Container = styled.div`
+`
+
+const Loader = styled.div`
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const Title = styled.h1`
@@ -50,68 +188,3 @@ const Subtitle = styled.p`
 const SpeciesText = styled.span`
     margin-left: 8px;
 `
-
-const CharacterPage = ({match}) => {
-    const [ characterDetails, setCharacterDetails ] = useState({})
-    const history = useHistory();
-
-    const handleClose = () => {
-        history.push(`/`);
-    }
-
-    const handleCharacterRequest = async (id) => {
-        try {
-            let characterDetails = await getCharacterInfo(id);
-            setCharacterDetails(characterDetails);
-    
-            characterDetails = await retrieveBasicCharacterInfo(characterDetails);
-            setCharacterDetails(characterDetails);
-    
-            const films = await retrieveFilmDetails(characterDetails);
-            setCharacterDetails({...characterDetails, films: films});
-        } catch (error) {
-            console.error(error);
-            return Promise.reject(error);
-        }
-    }
-
-    useEffect(() => {
-        handleCharacterRequest(match.params.id);
-    }, [match.params.id])
-
-    return (
-        <Fragment>
-            <Header>
-                <Container>
-                    <Title>
-                        {characterDetails.name}
-
-                        { characterDetails.species &&
-                            <SpeciesText>({characterDetails.species})</SpeciesText>
-                        }
-                    </Title>
-                    { characterDetails.homeworld_name &&
-                        <Subtitle>From {characterDetails.homeworld_name} (population: {characterDetails.homeworld_population})</Subtitle>
-                    }
-                </Container>
-                <Container>
-                    <CloseButton onClick={handleClose}>
-                        <FontAwesomeIcon icon={faTimes} size="lg" />
-                    </CloseButton>
-                </Container>
-            </Header>
-            <div>
-                { characterDetails.films_arr &&
-                    <Fragment>
-                        <h4>Films appeared in:</h4>
-                        <div>
-                            { characterDetails.films && <FilmList films={characterDetails.films}/> }
-                        </div>
-                    </Fragment>
-                }
-            </div>
-        </Fragment>
-    )
-}
-
-export default CharacterPage;

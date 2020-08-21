@@ -4,6 +4,7 @@ import styled from "styled-components";
 import CharacterCard from "./CharacterCard";
 
 const CharacterList = ({options}) => {    
+
     return (
         <>
             <List>    

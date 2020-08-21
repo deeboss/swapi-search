@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
-import { getCharacterSearchResults, getSpeciesInfo, getHomeworldInfo } from '../lib/api';
+import { getCharacterSearchResults } from '../lib/api';
 
 const SearchBar = ({options, setOptions }) => {  
     const ref = useRef();
@@ -35,10 +35,8 @@ const SearchBar = ({options, setOptions }) => {
 
     const handleChangePage = (e) => {
         if (e.target.id === 'next') {
-            // Go Next
             setCurrentPage(currentPage => currentPage + 1);
         } else if (e.target.id === 'previous') {
-            // Go Previous
             setCurrentPage(currentPage => currentPage - 1);
         }
     }
@@ -54,27 +52,6 @@ const SearchBar = ({options, setOptions }) => {
         const numOfPages = Math.round(Math.ceil(count / 10));
         setNumOfPages(numOfPages);
         setCurrentPage(1);
-
-        // const moreInfoRequests = options.map(async (i) => {
-        //     try {
-        //         const species = await getSpeciesInfo(i.species_url);
-        //         const homeworld = await getHomeworldInfo(i.homeworld_url);
-        //         return {
-        //             name: i.name,
-        //             id: i.id,
-        //             homeworld_name: homeworld.name,
-        //             homeworld_population: homeworld.population,
-        //             species: species.name
-        //         }
-        //     } catch (error) {
-        //         console.log("there's an error with moreInfo");
-        //         console.error(error);
-        //         return Promise.reject(error);
-        //     }
-        // })
-
-        // options = await Promise.all(moreInfoRequests);
-        // setOptions(options);
     };
     
     return (

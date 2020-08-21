@@ -28,7 +28,7 @@ export const getCharacterInfo = async (id) => {
         id,
         homeworld_url: data.homeworld,
         species_url: data.species[0],
-        films_arr: data.films
+        films_url: data.films
     }
 }
 
