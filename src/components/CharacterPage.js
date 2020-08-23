@@ -40,9 +40,7 @@ const CharacterPage = ({ match }) => {
       setIsLoading(false);
     } catch (err) {
       if (!axios.isCancel(err)) {
-        toast.error(
-          `Something went wrong. Error message: ${err.response.data.detail} (${err.response.status})`
-        );
+        toast.error(`Something went wrong.`);
         console.error(err);
       }
     }

@@ -15,7 +15,8 @@ export const getCharacterSearchResults = async (query) => {
 };
 
 export const getPageResults = async (url) => {
-  const response = await axios.get(url);
+  const httpsUrl = url.replace(/^http:\/\//i, 'https://');
+  const response = await axios.get(httpsUrl);
   const { results, next, previous } = response.data;
   const characters = results.map((result) => ({
     name: result.name,
