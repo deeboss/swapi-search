@@ -80,13 +80,17 @@ const Card = styled.div`
   cursor: pointer;
   list-style-type: none;
   border-radius: 4px;
-  width: calc(50% - 20px);
+  width: 100%;
   padding: 2em;
   margin-bottom: 2em;
   background: rgba(255, 255, 255, 0.05);
   transform: scale(0.98);
   transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
   position: relative;
+
+  @media only screen and (min-width: 600px) {
+    width: calc(50% - 20px);
+  }
 
   &:before {
     content: '';
