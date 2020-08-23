@@ -8,13 +8,6 @@ import SearchPage from './components/SearchPage';
 import CharacterPage from './components/CharacterPage';
 import NotFoundPage from './components/NotFoundPage';
 
-const Wrapper = styled.div`
-  padding: 4em 20px;
-  max-width: 1000px;
-  width: 100%;
-  margin: auto;
-`;
-
 const App = () => {
   return (
     <Wrapper>
@@ -31,3 +24,14 @@ const App = () => {
 };
 
 export default App;
+
+const Wrapper = styled.div`
+  padding: 2em 20px;
+  max-width: 1000px;
+  width: 100%;
+  margin: auto;
+
+  @media only screen and (min-width: 600px) {
+    padding: 4em 20px;
+  }
+`;

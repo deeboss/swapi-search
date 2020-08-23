@@ -153,15 +153,22 @@ export default CharacterPage;
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   border-bottom: 1px solid white;
   padding-bottom: 0.75em;
-  margin-top: 0;
   margin-bottom: 2.5em;
+
+  @media only screen and (min-width: 600px) {
+    align-items: center;
+  }
 `;
 
 const LabelTitle = styled.h4`
+  text-align: center;
   margin-bottom: 30px;
+
+  @media only screen and (min-width: 600px) {
+    align-items: left;
+  }
 `;
 
 const CloseButton = styled.span`
@@ -217,11 +224,18 @@ const Loader = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2.75rem;
+  margin-top: 0;
+  font-size: 1.5rem;
+  @media only screen and (min-width: 600px) {
+    font-size: 2.75rem;
+  }
 `;
 
 const Subtitle = styled.p`
-  font-size: 1.5rem;
+  font-size: 0.92rem;
+  @media only screen and (min-width: 600px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const SpeciesText = styled.span`

@@ -20,6 +20,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
 
   // Focus on search bar on render for better UX
   useEffect(() => {
+    ref.current.focus();
     document.addEventListener('keydown', handleKeypress);
 
     return () => {
@@ -27,7 +28,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
     };
   }, []);
 
-  const handleKeypress = (e) => {
+  const handleKeypress = () => {
     ref.current.focus();
   };
 
@@ -82,7 +83,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
       <Title>SWAPI SEARCH</Title>
       <Subtitle>Find your favorite Star Wars character!</Subtitle>
       <SearchInput
-        placeholder="Start typing to search for a character"
+        placeholder="Start typing to search"
         id="characterSearch"
         isLoading={isLoading}
         labelKey={(option) => option.name}
@@ -129,14 +130,20 @@ const Title = styled.h1`
   color: #ffe81f;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 4rem;
+  font-size: 2.5rem;
   margin-top: 0;
+  @media only screen and (min-width: 600px) {
+    font-size: 4rem;
+  }
 `;
 
 const Subtitle = styled.p`
-  font-size: 1.85rem;
+  font-size: 1.1rem;
   text-align: center;
   margin-bottom: 2.25em;
+  @media only screen and (min-width: 600px) {
+    font-size: 4rem;
+  }
 `;
 
 const SearchInput = styled(AsyncTypeahead)`
@@ -147,7 +154,10 @@ const SearchInput = styled(AsyncTypeahead)`
     appearance: none;
     border-radius: 4px;
     border: 1px solid #ccc;
-    font-size: 1.65rem;
+    font-size: 1.1rem;
+    @media only screen and (min-width: 600px) {
+      font-size: 1.65rem;
+    }
   }
 `;
 
