@@ -2,17 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const FilmList = (data) => {
-    const [ isLoading, setIsLoading ] = useState();
     const [ films, setFilms ] = useState();
-
-    const sortByDescending = (obj) => {
-        return obj.sort((a, b) => {
-            return Date.parse(b.release_date) - Date.parse(a.release_date);
-        });
-    }
 
     useEffect(() => {
         const { films } = data;
+        const sortByDescending = (obj) => {
+            return obj.sort((a, b) => {
+                return Date.parse(b.release_date) - Date.parse(a.release_date);
+            });
+        }
         setFilms(sortByDescending(films));
     }, [])
     

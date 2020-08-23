@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import styled from "styled-components";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { useHistory } from "react-router-dom";
 
 import { getCharacterInfo, getHomeworldInfo, getSpeciesInfo, getFilmInfo } from '../lib/api';
@@ -13,84 +16,88 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import FilmList from './FilmList';
 
 const CharacterPage = ({match}) => {
-
-    const signal = axios.CancelToken.source();
-
-    const [ isLoading, setIsLoading ] = useState();
+    const [ isLoading, setIsLoading ] = useState(true);
     const [ character, setCharacter ] = useState();
     const [ homeworld, setHomeworld ] = useState({});
     const [ species, setSpecies ] = useState();
     const [ films, setFilms ] = useState({});
 
+    const signal = axios.CancelToken.source();
     const history = useHistory();
-
     const handleClose = () => {
         history.push(`/`);
     }
 
-    const handleCharacterRequest = async (id) => {
-        try {
-            setIsLoading(true);
-            const results = await getCharacterInfo(id, signal.token);
-            setCharacter(results);
-            setIsLoading(false);
-        } catch (error) {
-            if (axios.isCancel(error)) {
-                console.log('Error: ', error.message); // => prints: Api is being canceled
-            } else {
-                history.push(`/error`);
-            }
-        }
-    }
-
-    const handleHomeworldRequest = async (data) => {
-      try {
-        const { homeworld_url } = data;
-        const results = await getHomeworldInfo(homeworld_url, signal.token);
-        setHomeworld(results);
-      } catch (error) {
-            if (axios.isCancel(error)) {
-                console.log('Error: ', error.message); // => prints: Api is being canceled
-            } else { console.error(error); }
-      }
-    }
-
-    const handleSpeciesRequest = async (data) => {
-        try {
-          const { species_url } = data;
-          const { name } = await getSpeciesInfo(species_url, signal.token);
-          setSpecies(name);
-        } catch (error) {
-            if (axios.isCancel(error)) {
-                console.log('Error: ', error.message); // => prints: Api is being canceled
-            } else { console.error(error); }
-        }
-      }
-    
-
-    const handleMultipleFilmRequest = async (data) => {
-        try {
-            const { films_url } = data;
-            const result = await Promise.all(films_url.map((url) => {
-                return getFilmInfo(url, signal.token);
-            }));
-            setFilms(result);
-        } catch (error) {
-            if (axios.isCancel(error)) {
-                console.log('Error: ', error.message); // => prints: Api is being canceled
-            } else { console.error(error); }
-        }
-    }
-    
     useEffect(() => {
-        handleCharacterRequest(match.params.id);
-
-        return () => {
-            signal.cancel('Api is being canceled');
+      const handleCharacterRequest = async (id) => {
+        try {
+          setIsLoading(true);
+          const results = await getCharacterInfo(id, signal.token);
+          setCharacter(results);
+          setIsLoading(false);
+        } catch (err) {
+          if (axios.isCancel(err)) {
+            console.log('Error: ', err.message);
+          } else if (err.response.status === 404) {
+            toast.error("Character does not exist");
+          } else if (err.response.status === 500) {
+            toast.error("Something went wrong with the API. Please try again later");
+          } else {
+            console.error(err);
+          }
         }
+      }
+      handleCharacterRequest(match.params.id);
+
+      return () => {
+          signal.cancel('API Get request canceled');
+      }
     }, [])
 
     useEffect(()=>{
+        const handleHomeworldRequest = async (data) => {
+            try {
+              const { homeworld_url } = data;
+              const results = await getHomeworldInfo(homeworld_url, signal.token);
+              setHomeworld(results);
+            } catch (err) {
+                  if (axios.isCancel(err)) {
+                      console.log('Error: ', err.message);
+                  } else { console.error(err); }
+            }
+          }
+      
+          const handleSpeciesRequest = async (data) => {
+              try {
+                const { species_url } = data;
+                const { name } = await getSpeciesInfo(species_url, signal.token);
+                setSpecies(name);
+              } catch (err) {
+                  if (axios.isCancel(err)) {
+                      console.log('Error: ', err.message);
+                  } else if (err.response.status === 404) {
+                    setSpecies(null);
+                  } else {
+                    console.error(err);
+                  }
+              }
+            }
+          
+      
+          const handleMultipleFilmRequest = async (data) => {
+              try {
+                  const { films_url } = data;
+                  const result = await Promise.all(films_url.map((url) => {
+                      return getFilmInfo(url, signal.token);
+                  }));
+                  setFilms(result);
+              } catch (err) {
+                  if (axios.isCancel(err)) {
+                      console.log('Error: ', err.message);
+                  } else { console.error(err); }
+              }
+          }
+
         if (character) {
             handleHomeworldRequest(character);
             handleSpeciesRequest(character);
@@ -98,12 +105,13 @@ const CharacterPage = ({match}) => {
         }
 
         return () => {
-            signal.cancel('Api is being canceled');
+            signal.cancel('API Get request canceled');
         }
     }, [character]);
 
     return (
         <>
+        <ToastContainer />
         { !isLoading ?
             <Wrapper>
                 <Header>

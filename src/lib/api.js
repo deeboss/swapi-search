@@ -25,7 +25,6 @@ export const getPageResults = async (pageUrl) => {
 }
 
 export const getCharacterInfo = async (id, cancelToken) => {
-    if (!id) { return {} }
     const response = await axios.get(`https://swapi.dev/api/people/${id}`, {
         cancelToken: cancelToken
     });
@@ -40,7 +39,6 @@ export const getCharacterInfo = async (id, cancelToken) => {
 }
 
 export const getSpeciesInfo = async (url, cancelToken) => {
-    if (!url) { return {} }
     const response = await axios.get(`${url}`, {
         cancelToken: cancelToken
     });
@@ -51,7 +49,6 @@ export const getSpeciesInfo = async (url, cancelToken) => {
 }
 
 export const getHomeworldInfo = async (url, cancelToken) => {
-    if (!url) { return {} }
     const response = await axios.get(`${url}`, {
         cancelToken: cancelToken
     });

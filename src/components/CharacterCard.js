@@ -23,10 +23,14 @@ const CharacterCard = ({character}) => {
     try {
       const { name } = await getSpeciesInfo(character.species_url, signal.token);
       setSpecies(name);
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log('Error: ', error.message); // => prints: Api is being canceled
-      } else { console.error(error); }
+    } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Error: ', err.message); // => prints: Canceled GET request. Component unmounted
+      } else if (err.response.status === 404) {
+        setSpecies(null);
+      } else {
+        console.error(err);
+      }
     }
   }
 
@@ -34,17 +38,19 @@ const CharacterCard = ({character}) => {
     try {
       const results = await getHomeworldInfo(character.homeworld_url, signal.token);
       setHomeworld(results);
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log('Error: ', error.message); // => prints: Api is being canceled
-      } else { console.error(error); }
+    } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Error: ', err.message); // => prints: Canceled GET request. Component unmounted
+      } else {
+        console.error(err);
+      }
     }
   }
 
   useEffect(() => {
     handleSpeciesRequest();
     handleHomeworldRequest();
-    return () => {signal.cancel('Api is being canceled');}
+    return () => {signal.cancel('Canceled GET request. Component unmounted');}
   }, []);
 
   return (

@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import styled from "styled-components";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
@@ -35,8 +38,14 @@ const SearchBar = ({ setCharacters }) => {
             setCharacters(pageResults.characters);
             setNextPageUrl(pageResults.next);
             setPrevPageUrl(pageResults.previous);
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+          if (err.response.status === 404) {
+            toast.error("No page found");
+          } else if (err.response.status === 500) {
+            toast.error("Something went wrong with the API. Please try again later");
+          } else {
+            console.log(err);
+          }
         }
     }
 
@@ -51,8 +60,14 @@ const SearchBar = ({ setCharacters }) => {
             setNextPageUrl(searchResults.next);
             setPrevPageUrl(searchResults.previous);
             setIsLoading(false);
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+          if (err.response.status === 404) {
+            toast.error("Invalid search");
+          } else if (err.response.status === 500) {
+            toast.error("Something went wrong with the API. Please try again later");
+          } else {
+            console.log(err);
+          }
         }
     };
 
@@ -66,6 +81,7 @@ const SearchBar = ({ setCharacters }) => {
 
     return (
         <>
+            <ToastContainer />
             <Title>SWAPI SEARCH</Title>
             <SearchInput
                 placeholder="Type to search for a Star Wars character"
