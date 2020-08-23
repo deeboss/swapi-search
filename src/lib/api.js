@@ -28,9 +28,12 @@ export const getPageResults = async (url) => {
 };
 
 export const getCharacterInfo = async (id, cancelToken) => {
-  const response = await axios.get(`https://swapi.dev/api/people/${id}`, {
+  const response = await axios.get('https://swapi.dev/api/people/1/', {
     cancelToken: cancelToken,
   });
+  // const response = await axios.get(`https://swapi.dev/api/people/${id}`, {
+  //   cancelToken: cancelToken,
+  // });
   const data = response.data;
   return {
     name: data.name,
