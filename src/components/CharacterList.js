@@ -3,14 +3,23 @@ import styled from 'styled-components';
 
 import CharacterCard from './CharacterCard';
 
-const CharacterList = ({ characters }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+
+const CharacterList = ({ characters, isLoading }) => {
   return (
     <>
-      <List>
-        {characters.map((character) => (
-          <CharacterCard key={character.id} character={character} />
-        ))}
-      </List>
+      {!isLoading ? (
+        <List>
+          {characters.map((character) => (
+            <CharacterCard key={character.id} character={character} />
+          ))}
+        </List>
+      ) : (
+        <Loader>
+          <FontAwesomeIcon icon={faCircleNotch} spin size="5x" />
+        </Loader>
+      )}
     </>
   );
 };
@@ -25,4 +34,13 @@ const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+`;
+
+const Loader = styled.div`
+  margin-top: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;

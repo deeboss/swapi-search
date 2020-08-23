@@ -10,10 +10,9 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 import { getCharacterSearchResults, getPageResults } from '../lib/api';
 
-const SearchBar = ({ setCharacters }) => {
+const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
   const ref = useRef();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [nextPageUrl, setNextPageUrl] = useState('');
@@ -26,6 +25,7 @@ const SearchBar = ({ setCharacters }) => {
 
   const handlePageChange = async (event) => {
     try {
+      setIsLoading(true);
       let pageResults;
       if (event.target.id === 'next') {
         pageResults = await getPageResults(nextPageUrl);
@@ -37,6 +37,7 @@ const SearchBar = ({ setCharacters }) => {
       setCharacters(pageResults.characters);
       setNextPageUrl(pageResults.next);
       setPrevPageUrl(pageResults.previous);
+      setIsLoading(false);
     } catch (err) {
       toast.error(err.response.data.detail);
       console.error(err);
