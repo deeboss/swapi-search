@@ -1,32 +1,28 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import CharacterCard from "./CharacterCard";
+import CharacterCard from './CharacterCard';
 
-const CharacterList = ({characters}) => {    
-
-    return (
-        <>
-            <List>    
-                {characters.map(character => (
-                    <CharacterCard
-                        key={character.id}
-                        character={character}
-                    />
-                ))}
-            </List>
-        </>
-    )
-}
+const CharacterList = ({ characters }) => {
+  return (
+    <>
+      <List>
+        {characters.map((character) => (
+          <CharacterCard key={character.id} character={character} />
+        ))}
+      </List>
+    </>
+  );
+};
 
 export default CharacterList;
 
 const List = styled.ul`
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-`
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;

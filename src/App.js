@@ -1,6 +1,8 @@
 import React from 'react';
-import styled from "styled-components"
+import styled from 'styled-components';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import SearchPage from './components/SearchPage';
 import CharacterPage from './components/CharacterPage';
@@ -11,21 +13,22 @@ const Wrapper = styled.div`
   max-width: 1000px;
   width: 100%;
   margin: auto;
-`
+`;
 
 const App = () => {
   return (
     <Wrapper>
+      <ToastContainer />
       <BrowserRouter>
         <Switch>
-          <Route exact path='/' component={SearchPage} />
-          <Route exact path='/character/:id' component={CharacterPage} />
+          <Route exact path="/" component={SearchPage} />
+          <Route exact path="/character/:id" component={CharacterPage} />
           <Route component={NotFoundPage} />
-          <Redirect to='/' />
+          <Redirect to="/" />
         </Switch>
       </BrowserRouter>
     </Wrapper>
   );
-}
+};
 
 export default App;
