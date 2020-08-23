@@ -142,7 +142,7 @@ const Subtitle = styled.p`
   text-align: center;
   margin-bottom: 2.25em;
   @media only screen and (min-width: 600px) {
-    font-size: 4rem;
+    font-size: 1.85rem;
   }
 `;
 
