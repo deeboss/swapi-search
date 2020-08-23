@@ -45,7 +45,7 @@ export const getSpeciesInfo = async (url, cancelToken) => {
     throw 'No valid species found';
   }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
-  const response = await axios.get(`${httpsUrl}`, {
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;
@@ -59,7 +59,7 @@ export const getHomeworldInfo = async (url, cancelToken) => {
     return {};
   }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
-  const response = await axios.get(`${httpsUrl}`, {
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;
@@ -80,7 +80,7 @@ export const getFilmInfo = async (url, cancelToken) => {
     return {};
   }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
-  const response = await axios.get(`${httpsUrl}`, {
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;
