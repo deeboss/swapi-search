@@ -89,7 +89,7 @@ const Card = styled.div`
   position: relative;
 
   @media only screen and (min-width: 600px) {
-    width: calc(50% - 20px);
+    width: calc(50% - 1em);
   }
 
   &:before {
@@ -107,7 +107,7 @@ const Card = styled.div`
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.16);
     transform: scale(1);
     transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
 

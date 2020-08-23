@@ -40,9 +40,7 @@ const CharacterPage = ({ match }) => {
       setIsLoading(false);
     } catch (err) {
       if (!axios.isCancel(err)) {
-        toast.error(
-          `Something went wrong. Error message: ${err.response.data.detail} (${err.response.status})`
-        );
+        toast.error(`Something went wrong.`);
         console.error(err);
       }
     }
@@ -135,7 +133,7 @@ const CharacterPage = ({ match }) => {
           <Container>
             {films[0] && (
               <>
-                <h4>Films appeared in:</h4>
+                <LabelTitle>Film(s) appeared in:</LabelTitle>
                 <div>{films && <FilmList films={films} />}</div>
               </>
             )}
@@ -155,10 +153,22 @@ export default CharacterPage;
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   border-bottom: 1px solid white;
   padding-bottom: 0.75em;
   margin-bottom: 2.5em;
+
+  @media only screen and (min-width: 600px) {
+    align-items: center;
+  }
+`;
+
+const LabelTitle = styled.h4`
+  text-align: center;
+  margin-bottom: 30px;
+
+  @media only screen and (min-width: 600px) {
+    text-align: left;
+  }
 `;
 
 const CloseButton = styled.span`
@@ -166,13 +176,38 @@ const CloseButton = styled.span`
   background: rgba(255, 255, 255, 0);
   padding: 15px;
   border-radius: 40px;
+  position: relative;
 
   svg {
     pointer-events: none;
   }
 
+  &:after {
+    content: 'Close';
+    font-size: smaller;
+    font-weight: bolder;
+    padding: 4px;
+    bottom: 5px;
+    position: absolute;
+    left: 50%;
+    bottom: -30px;
+    background: black;
+    text-transform: uppercase;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 5;
+    transition: all 0.25s ease-in-out;
+  }
+
   &:hover {
     background: rgba(255, 255, 255, 0.12);
+
+    &:after {
+      opacity: 1;
+      transform: translate(-50%, -40%);
+      transition: all 0.25s ease-in-out;
+    }
   }
 `;
 const Wrapper = styled.div``;
@@ -188,9 +223,20 @@ const Loader = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  margin-top: 0;
+  font-size: 1.5rem;
+  @media only screen and (min-width: 600px) {
+    font-size: 2.75rem;
+  }
+`;
 
-const Subtitle = styled.p``;
+const Subtitle = styled.p`
+  font-size: 0.92rem;
+  @media only screen and (min-width: 600px) {
+    font-size: 1.5rem;
+  }
+`;
 
 const SpeciesText = styled.span`
   margin-left: 8px;

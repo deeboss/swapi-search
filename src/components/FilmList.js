@@ -20,9 +20,13 @@ const FilmList = (data) => {
         {films &&
           films.map((film) => (
             <Card key={film.title}>
-              <Title>{film.title}</Title>
-              <p>Release date: {film.release_date}</p>
-              <p>{film.opening_crawl}</p>
+              <Content>
+                <Title>{film.title}</Title>
+                <Description>{film.opening_crawl}</Description>
+              </Content>
+              <Footer>
+                <p>Release date: {film.release_date}</p>
+              </Footer>
             </Card>
           ))}
       </List>
@@ -43,14 +47,50 @@ const List = styled.ul`
 
 const Card = styled.li`
   list-style-type: none;
-  width: calc(50% - 10px);
-  padding: 28px;
-  margin-bottom: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  @media only screen and (min-width: 600px) {
+    width: calc(50% - 15px);
+    margin-bottom: 30px;
+  }
 `;
+
+const Content = styled.div``;
 
 const Title = styled.h3`
   // text-transform: uppercase;
+  font-size: 1.15rem;
   margin-top: 0;
   font-weight: bolder;
+  @media only screen and (min-width: 600px) {
+    font-size: 1.4rem;
+  }
+`;
+
+const Description = styled.p`
+  line-height: 1.65;
+  margin: 20px 0;
+
+  @media only screen and (min-width: 600px) {
+    font-size: 1.1rem;
+    line-height: 1.85;
+  }
+`;
+
+const Footer = styled.div`
+  font-size: 1rem;
+  align-self: bottom;
+  p {
+    width: 100%;
+    padding-top: 15px;
+    margin-bottom: 0;
+    border-top: 1px solid white;
+  }
 `;

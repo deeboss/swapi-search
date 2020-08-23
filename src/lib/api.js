@@ -14,8 +14,9 @@ export const getCharacterSearchResults = async (query) => {
   return { characters, count, next, previous };
 };
 
-export const getPageResults = async (pageUrl) => {
-  const response = await axios.get(pageUrl);
+export const getPageResults = async (url) => {
+  const httpsUrl = url.replace(/^http:\/\//i, 'https://');
+  const response = await axios.get(httpsUrl);
   const { results, next, previous } = response.data;
   const characters = results.map((result) => ({
     name: result.name,
@@ -27,7 +28,7 @@ export const getPageResults = async (pageUrl) => {
 };
 
 export const getCharacterInfo = async (id, cancelToken) => {
-  const response = await axios.get(`https://swapi.dev/api/people/${id}`, {
+  const response = await axios.get(`https://swapi.dev/api/people/${id}/`, {
     cancelToken: cancelToken,
   });
   const data = response.data;
@@ -44,7 +45,8 @@ export const getSpeciesInfo = async (url, cancelToken) => {
   if (!url) {
     throw 'No valid species found';
   }
-  const response = await axios.get(`${url}`, {
+  const httpsUrl = url.replace(/^http:\/\//i, 'https://');
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;
@@ -57,12 +59,12 @@ export const getHomeworldInfo = async (url, cancelToken) => {
   if (!url) {
     return {};
   }
-  const response = await axios.get(`${url}`, {
+  const httpsUrl = url.replace(/^http:\/\//i, 'https://');
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;
 
-  // Prettify number by adding commas after every 3 digits
   let population = data.population;
   if (population !== 'unknown') {
     population = parseInt(population).toLocaleString();
@@ -77,7 +79,8 @@ export const getFilmInfo = async (url, cancelToken) => {
   if (!url) {
     return {};
   }
-  const response = await axios.get(`${url}`, {
+  const httpsUrl = url.replace(/^http:\/\//i, 'https://');
+  const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,
   });
   const data = response.data;

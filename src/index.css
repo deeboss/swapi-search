@@ -1,11 +1,12 @@
-html,body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
 
 body {
   margin: 0;
-  font-family: 'Gothic A1', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -14,6 +15,8 @@ body {
   font-size: 100%;
 }
 
-*, :after,:before {
+*,
+:after,
+:before {
   box-sizing: border-box;
 }

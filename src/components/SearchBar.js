@@ -21,7 +21,16 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
   // Focus on search bar on render for better UX
   useEffect(() => {
     ref.current.focus();
+    document.addEventListener('keydown', handleKeypress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeypress);
+    };
   }, []);
+
+  const handleKeypress = () => {
+    ref.current.focus();
+  };
 
   const handlePageChange = async (event) => {
     try {
@@ -72,8 +81,9 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
   return (
     <>
       <Title>SWAPI SEARCH</Title>
+      <Subtitle>Find your favorite Star Wars character!</Subtitle>
       <SearchInput
-        placeholder="Type to search for a Star Wars character"
+        placeholder="Start typing to search"
         id="characterSearch"
         isLoading={isLoading}
         labelKey={(option) => option.name}
@@ -88,7 +98,9 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
         <MenuBar>
           <Container>
             <p>
-              {searchResultCount} <span>results</span> | Page: {currentPage}
+              {searchResultCount} <span>results</span>
+              <Divider>|</Divider>
+              Page: {currentPage}
             </p>
           </Container>
           <Container>
@@ -118,42 +130,33 @@ const Title = styled.h1`
   color: #ffe81f;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 3.5rem;
+  font-size: 2.5rem;
+  margin-top: 0;
+  @media only screen and (min-width: 600px) {
+    font-size: 4rem;
+  }
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2.25em;
+  @media only screen and (min-width: 600px) {
+    font-size: 1.85rem;
+  }
 `;
 
 const SearchInput = styled(AsyncTypeahead)`
   input {
-    padding: 8px 6px;
+    padding: 10px 8px;
     width: 100%;
     -webkit-appearance: none;
     appearance: none;
-    border-radius: 3px;
+    border-radius: 4px;
     border: 1px solid #ccc;
-    font-size: larger;
-  }
-
-  .dropdown-menu {
-    z-index: 5;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    background: white;
-
-    a {
-      display: block;
-      padding: 12px 6px;
-      color: #000000;
-      text-decoration: none;
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.08);
-      }
-    }
-
-    p {
-      margin: 0;
-      color: #000000;
+    font-size: 1.1rem;
+    @media only screen and (min-width: 600px) {
+      font-size: 1.65rem;
     }
   }
 `;
@@ -162,7 +165,13 @@ const MenuBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin: 15px 0;
+  font-size: 0.85rem;
+`;
+
+const Divider = styled.span`
+  display: inline-block;
+  margin: 0 10px;
 `;
 
 const Container = styled.div``;
@@ -170,27 +179,20 @@ const Container = styled.div``;
 const Button = styled.span`
   display: inline-block;
   cursor: pointer;
+  border-radius: 4px;
+  margin: 8px;
+  text-transform: uppercase;
 
   svg {
     pointer-events: none;
-  }
-
-  &:first-of-type {
-    svg {
-      margin-right: 10px;
-    }
+    margin: 0 8px;
   }
 
   &:last-of-type {
-    margin-left: 20px;
-
-    svg {
-      margin-left: 8px;
-    }
+    margin-right: 0px;
   }
 
-  &[disabled] {
-    opacity: 0.5;
-    pointer-events: none;
+  &:hover {
+    text-decoration: underline;
   }
 `;
