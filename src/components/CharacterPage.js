@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
@@ -12,6 +13,8 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import FilmList from './FilmList';
 
 const CharacterPage = ({match}) => {
+
+    const signal = axios.CancelToken.source();
 
     const [ isLoading, setIsLoading ] = useState();
     const [ character, setCharacter ] = useState();
@@ -28,31 +31,39 @@ const CharacterPage = ({match}) => {
     const handleCharacterRequest = async (id) => {
         try {
             setIsLoading(true);
-            const results = await getCharacterInfo(id);
+            const results = await getCharacterInfo(id, signal.token);
             setCharacter(results);
             setIsLoading(false);
         } catch (error) {
-            history.push(`/404`);
+            if (axios.isCancel(error)) {
+                console.log('Error: ', error.message); // => prints: Api is being canceled
+            } else {
+                history.push(`/error`);
+            }
         }
     }
 
     const handleHomeworldRequest = async (data) => {
       try {
         const { homeworld_url } = data;
-        const results = await getHomeworldInfo(homeworld_url);
+        const results = await getHomeworldInfo(homeworld_url, signal.token);
         setHomeworld(results);
       } catch (error) {
-        console.error(error);
+            if (axios.isCancel(error)) {
+                console.log('Error: ', error.message); // => prints: Api is being canceled
+            } else { console.error(error); }
       }
     }
 
     const handleSpeciesRequest = async (data) => {
         try {
           const { species_url } = data;
-          const { name } = await getSpeciesInfo(species_url);
+          const { name } = await getSpeciesInfo(species_url, signal.token);
           setSpecies(name);
         } catch (error) {
-          console.error(error);
+            if (axios.isCancel(error)) {
+                console.log('Error: ', error.message); // => prints: Api is being canceled
+            } else { console.error(error); }
         }
       }
     
@@ -61,17 +72,22 @@ const CharacterPage = ({match}) => {
         try {
             const { films_url } = data;
             const result = await Promise.all(films_url.map((url) => {
-                return getFilmInfo(url);
+                return getFilmInfo(url, signal.token);
             }));
             setFilms(result);
         } catch (error) {
-            console.error(error);
-            return
+            if (axios.isCancel(error)) {
+                console.log('Error: ', error.message); // => prints: Api is being canceled
+            } else { console.error(error); }
         }
     }
     
     useEffect(() => {
         handleCharacterRequest(match.params.id);
+
+        return () => {
+            signal.cancel('Api is being canceled');
+        }
     }, [])
 
     useEffect(()=>{
@@ -79,6 +95,10 @@ const CharacterPage = ({match}) => {
             handleHomeworldRequest(character);
             handleSpeciesRequest(character);
             handleMultipleFilmRequest(character);
+        }
+
+        return () => {
+            signal.cancel('Api is being canceled');
         }
     }, [character]);
 

@@ -21,11 +21,11 @@ const FilmList = (data) => {
             <List>
                 { films && 
                     films.map(film => (
-                        <Item key={film.title}>
-                            <FilmTitle>{film.title}</FilmTitle>
+                        <Card key={film.title}>
+                            <Title>{film.title}</Title>
                             <p>Release date: {film.release_date}</p>
-                            <p>{film.clipped_opening_crawl}</p>
-                        </Item>
+                            <p>{film.opening_crawl}</p>
+                        </Card>
                     ))
                 }
             </List>
@@ -45,17 +45,16 @@ const List = styled.ul`
     justify-content: space-between;
 `
 
-const Item = styled.li`
+const Card = styled.li`
     list-style-type: none;
     width: calc(50% - 10px);
-    padding: 20px;
-    text-align: center;
+    padding: 28px;
     margin-bottom: 15px;
     background: rgba(255,255,255,0.05);
-    color: #ffe81f;
 `
 
-const FilmTitle = styled.h2`
-    text-transform: uppercase;
-    font-weight: bold;
+const Title = styled.h3`
+    // text-transform: uppercase;
+    margin-top: 0;
+    font-weight: bolder;
 `

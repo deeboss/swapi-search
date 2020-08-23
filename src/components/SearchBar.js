@@ -10,6 +10,7 @@ import { searchCharacter, getPageResults} from '../lib/api';
 
 const SearchBar = ({ setCharacters }) => {
     const ref = useRef();
+    
     const [ isLoading, setIsLoading ] = useState(false);
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ searchResultCount, setSearchResultCount ] = useState(0);
@@ -22,29 +23,37 @@ const SearchBar = ({ setCharacters }) => {
     }, []);
 
     const handlePageChange = async (event) => {
-        let pageResults
-        if (event.target.id === 'next') {
-            setCurrentPage(currentPage + 1)
-            pageResults = await getPageResults(nextPageUrl)
-        } else {
-            setCurrentPage(currentPage - 1)
-            pageResults = await getPageResults(prevPageUrl)
+        try {
+            let pageResults
+            if (event.target.id === 'next') {
+                setCurrentPage(currentPage + 1)
+                pageResults = await getPageResults(nextPageUrl)
+            } else {
+                setCurrentPage(currentPage - 1)
+                pageResults = await getPageResults(prevPageUrl)
+            }
+            setCharacters(pageResults.characters);
+            setNextPageUrl(pageResults.next);
+            setPrevPageUrl(pageResults.previous);
+        } catch (error) {
+            console.error(error);
         }
-        setCharacters(pageResults.characters)
-        setNextPageUrl(pageResults.next)
-        setPrevPageUrl(pageResults.previous)
     }
 
     const handleNewSearch = async (query) => {
-        setIsLoading(true);
-        // reset current page to 1 on new query
-        setCurrentPage(1)
-        const searchResults = await searchCharacter(query);
-        setCharacters(searchResults.characters);
-        setSearchResultCount(searchResults.count);
-        setNextPageUrl(searchResults.next)
-        setPrevPageUrl(searchResults.previous)
-        setIsLoading(false);
+        try {
+            setIsLoading(true);
+            // reset current page to 1 on new query
+            setCurrentPage(1);
+            const searchResults = await searchCharacter(query);
+            setCharacters(searchResults.characters);
+            setSearchResultCount(searchResults.count);
+            setNextPageUrl(searchResults.next);
+            setPrevPageUrl(searchResults.previous);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     // If query is empty, empty the results
@@ -72,9 +81,8 @@ const SearchBar = ({ setCharacters }) => {
             />
             { !!searchResultCount &&
                 <MenuBar>
-                    <Container><p>{searchResultCount} <span>results</span></p></Container>
+                    <Container><p>{searchResultCount} <span>results</span> | Page: { currentPage }</p></Container>
                     <Container>
-                        { currentPage }
                         { prevPageUrl &&
                             <Button id="previous" onClick={handlePageChange}>
                                 <FontAwesomeIcon icon={faChevronLeft} />

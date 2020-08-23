@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import axios from 'axios';
+
 import { getHomeworldInfo, getSpeciesInfo } from '../lib/api';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,33 +13,38 @@ const CharacterCard = ({character}) => {
   const [ homeworld, setHomeworld ] = useState({});
 
   const history = useHistory();
+  const signal = axios.CancelToken.source();
 
   const handleClick = (id) => {
     history.push(`/character/${id}`);
   }
 
-  // NOTE: Here we separate species request and homeworld. In CharacterPage they're one request. Why?
   const handleSpeciesRequest = async () => {
     try {
-      const { name } = await getSpeciesInfo(character.species_url);
+      const { name } = await getSpeciesInfo(character.species_url, signal.token);
       setSpecies(name);
     } catch (error) {
-      console.error(error);
+      if (axios.isCancel(error)) {
+        console.log('Error: ', error.message); // => prints: Api is being canceled
+      } else { console.error(error); }
     }
   }
 
   const handleHomeworldRequest = async () => {
     try {
-      const results = await getHomeworldInfo(character.homeworld_url);
+      const results = await getHomeworldInfo(character.homeworld_url, signal.token);
       setHomeworld(results);
     } catch (error) {
-      console.error(error);
+      if (axios.isCancel(error)) {
+        console.log('Error: ', error.message); // => prints: Api is being canceled
+      } else { console.error(error); }
     }
   }
 
   useEffect(() => {
     handleSpeciesRequest();
     handleHomeworldRequest();
+    return () => {signal.cancel('Api is being canceled');}
   }, []);
 
   return (
@@ -62,7 +69,7 @@ const Card = styled.div`
     cursor: pointer;
     list-style-type: none;
     border-radius: 4px;
-    width: calc(50% - 10px);
+    width: calc(50% - 20px);
     padding: 2em;
     margin-bottom: 2em;
     background: rgba(255,255,255,0.05);

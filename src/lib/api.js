@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const searchCharacter = async (query) => {
-    const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`)
+    const response = await axios.get(`https://swapi.dev/api/people/?search=${query}`);
     const { results, count, next, previous } = response.data;
     const characters = results.map((result) => ({
         name: result.name,
@@ -13,7 +13,7 @@ export const searchCharacter = async (query) => {
 }
 
 export const getPageResults = async (pageUrl) => {
-    const response = await axios.get(pageUrl)
+    const response = await axios.get(pageUrl);
     const { results, next, previous } = response.data;
     const characters = results.map((result) => ({
         name: result.name,
@@ -24,9 +24,11 @@ export const getPageResults = async (pageUrl) => {
     return { characters, next, previous };
 }
 
-export const getCharacterInfo = async (id) => {
+export const getCharacterInfo = async (id, cancelToken) => {
     if (!id) { return {} }
-    const response = await axios.get(`https://swapi.dev/api/people/${id}`);
+    const response = await axios.get(`https://swapi.dev/api/people/${id}`, {
+        cancelToken: cancelToken
+    });
     const data = response.data
     return {
         name: data.name,
@@ -37,18 +39,22 @@ export const getCharacterInfo = async (id) => {
     }
 }
 
-export const getSpeciesInfo = async (url) => {
+export const getSpeciesInfo = async (url, cancelToken) => {
     if (!url) { return {} }
-    const response = await axios.get(`${url}`)
+    const response = await axios.get(`${url}`, {
+        cancelToken: cancelToken
+    });
     const data = response.data
     return {
         name: data.name,
     }
 }
 
-export const getHomeworldInfo = async (url) => {
+export const getHomeworldInfo = async (url, cancelToken) => {
     if (!url) { return {} }
-    const response = await axios.get(`${url}`)
+    const response = await axios.get(`${url}`, {
+        cancelToken: cancelToken
+    });
     const data = response.data
 
     // Prettify number by adding commas after every 3 digits
@@ -62,16 +68,17 @@ export const getHomeworldInfo = async (url) => {
     }
 }
 
-export const getFilmInfo = async (url) => {
+export const getFilmInfo = async (url, cancelToken) => {
     if (!url) { return {} }
-    const response = await axios.get(`${url}`)
+    const response = await axios.get(`${url}`, {
+        cancelToken: cancelToken
+    });
     const data = response.data
     // Clip opening crawl to first 150 characters
-    const clipped_opening_crawl = data.opening_crawl.substring(0, 150);
+    const opening_crawl = data.opening_crawl.substring(0, 150);
     return {
         title: data.title,
         release_date: data.release_date,
-        opening_crawl: data.opening_crawl,
-        clipped_opening_crawl: clipped_opening_crawl
+        opening_crawl: opening_crawl
     }
 }
