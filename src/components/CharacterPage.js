@@ -167,7 +167,7 @@ const LabelTitle = styled.h4`
   margin-bottom: 30px;
 
   @media only screen and (min-width: 600px) {
-    align-items: left;
+    text-align: left;
   }
 `;
 
