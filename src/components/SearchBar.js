@@ -20,8 +20,16 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
 
   // Focus on search bar on render for better UX
   useEffect(() => {
-    ref.current.focus();
+    document.addEventListener('keydown', handleKeypress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeypress);
+    };
   }, []);
+
+  const handleKeypress = (e) => {
+    ref.current.focus();
+  };
 
   const handlePageChange = async (event) => {
     try {

@@ -28,11 +28,6 @@ export const getPageResults = async (url) => {
 };
 
 export const getCharacterInfo = async (id, cancelToken) => {
-  // const httpsUrl = `https://swapi.dev/api/people/${id}/`;
-  // console.log(httpsUrl);
-  // const response = await axios.get(httpsUrl, {
-  //   cancelToken: cancelToken,
-  // });
   const response = await axios.get(`https://swapi.dev/api/people/${id}/`, {
     cancelToken: cancelToken,
   });
@@ -70,7 +65,6 @@ export const getHomeworldInfo = async (url, cancelToken) => {
   });
   const data = response.data;
 
-  // Prettify number by adding commas after every 3 digits
   let population = data.population;
   if (population !== 'unknown') {
     population = parseInt(population).toLocaleString();
