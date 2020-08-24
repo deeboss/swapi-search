@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,13 +12,13 @@ const App = () => {
   return (
     <Wrapper>
       <ToastContainer />
-      <HashRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
           <Route exact path="/" component={SearchPage} />
           <Route exact path="/character/:id" component={CharacterPage} />
           <Route component={NotFoundPage} />
         </Switch>
-      </HashRouter>
+      </BrowserRouter>
     </Wrapper>
   );
 };
