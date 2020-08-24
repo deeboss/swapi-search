@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import CharacterCard from './CharacterCard';
@@ -37,10 +37,10 @@ const List = styled.ul`
 `;
 
 const Loader = styled.div`
-  margin-top: 50px;
   width: 100%;
+  margin-top: 50px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
+  align-items: center;
 `;

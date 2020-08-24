@@ -55,7 +55,7 @@ const CharacterCard = ({ character }) => {
     handleSpeciesRequest();
     handleHomeworldRequest();
     return () => {
-      signal.cancel('Component unmounted, canceling promises');
+      signal.cancel();
     };
   }, []);
 

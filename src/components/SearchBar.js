@@ -17,6 +17,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [prevPageUrl, setPrevPageUrl] = useState('');
+  const [showEmptyState, setShowEmptyState] = useState(false);
 
   // Focus on search bar on render for better UX
   useEffect(() => {
@@ -48,7 +49,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
       setPrevPageUrl(pageResults.previous);
       setIsLoading(false);
     } catch (err) {
-      toast.error(err.response.data.detail);
+      toast.error(err);
       console.error(err);
     }
   };
@@ -63,9 +64,13 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
       setSearchResultCount(searchResults.count);
       setNextPageUrl(searchResults.next);
       setPrevPageUrl(searchResults.previous);
+
+      const noResultsFound = !!searchResults.count ? false : true;
+      setShowEmptyState(noResultsFound);
+
       setIsLoading(false);
     } catch (err) {
-      toast.error(err.response.data.detail);
+      toast.error(err);
       console.error(err);
     }
   };
@@ -75,6 +80,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
     if (!query) {
       setSearchResultCount(0);
       setCharacters([]);
+      setIsLoading(false);
     }
   };
 
@@ -119,6 +125,15 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
           </Container>
         </MenuBar>
       )}
+
+      {showEmptyState && !isLoading && (
+        <EmptyStateBox>
+          <MessageTitle>No results found</MessageTitle>
+          <MessageSubtitle>
+            Try adjusting your search to find the character you're looking for.
+          </MessageSubtitle>
+        </EmptyStateBox>
+      )}
     </>
   );
 };
@@ -154,6 +169,7 @@ const SearchInput = styled(AsyncTypeahead)`
     appearance: none;
     border-radius: 4px;
     border: 1px solid #ccc;
+    margin-bottom: 15px;
     font-size: 1.1rem;
     @media only screen and (min-width: 600px) {
       font-size: 1.65rem;
@@ -165,7 +181,6 @@ const MenuBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0;
   font-size: 0.85rem;
 `;
 
@@ -195,4 +210,25 @@ const Button = styled.span`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const EmptyStateBox = styled.div`
+  width: 100%;
+  height: 350px;
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MessageTitle = styled.h4`
+  font-size: 2rem;
+  margin: 0;
+  display: block;
+`;
+const MessageSubtitle = styled.p`
+  font-size: 1.25rem;
+  display: block;
 `;
