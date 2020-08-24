@@ -96,7 +96,7 @@ const CharacterPage = ({ match }) => {
     handleCharacterRequest(match.params.id);
 
     return () => {
-      signal.cancel('API Get request canceled');
+      signal.cancel();
     };
   }, []);
 
@@ -108,7 +108,7 @@ const CharacterPage = ({ match }) => {
     }
 
     return () => {
-      signal.cancel('Component unmounted, canceling promises');
+      signal.cancel();
     };
   }, [character]);
 
