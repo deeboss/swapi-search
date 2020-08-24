@@ -214,21 +214,31 @@ const Button = styled.span`
 
 const EmptyStateBox = styled.div`
   width: 100%;
-  height: 350px;
+  height: 200px;
   margin-top: 50px;
   background: rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+
+  @media only screen and (min-width: 600px) {
+    height: 350px;
+  }
 `;
 
 const MessageTitle = styled.h4`
-  font-size: 2rem;
   margin: 0;
+  font-size: 1.5rem;
   display: block;
+  @media only screen and (min-width: 600px) {
+    font-size: 2rem;
+  }
 `;
 const MessageSubtitle = styled.p`
-  font-size: 1.25rem;
   display: block;
+  @media only screen and (min-width: 600px) {
+    font-size: 1.25rem;
+  }
 `;
