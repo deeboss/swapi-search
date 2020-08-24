@@ -17,7 +17,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [nextPageUrl, setNextPageUrl] = useState('');
   const [prevPageUrl, setPrevPageUrl] = useState('');
-  const [showEmptyState, setShowEmptyState] = useState(false);
+  const [showNoResults, setShowNoResults] = useState(false);
 
   // Focus on search bar on render for better UX
   useEffect(() => {
@@ -64,9 +64,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
       setSearchResultCount(searchResults.count);
       setNextPageUrl(searchResults.next);
       setPrevPageUrl(searchResults.previous);
-
-      const noResultsFound = !!searchResults.count ? false : true;
-      setShowEmptyState(noResultsFound);
+      setShowNoResults(!searchResults.count);
 
       setIsLoading(false);
     } catch (err) {
@@ -126,7 +124,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
         </MenuBar>
       )}
 
-      {showEmptyState && !isLoading && (
+      {showNoResults && !isLoading && (
         <EmptyStateBox>
           <MessageTitle>No results found</MessageTitle>
           <MessageSubtitle>

@@ -53,9 +53,6 @@ export const getSpeciesInfo = async (url, cancelToken) => {
 };
 
 export const getHomeworldInfo = async (url, cancelToken) => {
-  if (!url) {
-    return {};
-  }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
     cancelToken,
@@ -73,9 +70,6 @@ export const getHomeworldInfo = async (url, cancelToken) => {
 };
 
 export const getFilmInfo = async (url, cancelToken) => {
-  if (!url) {
-    return {};
-  }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
     cancelToken,
