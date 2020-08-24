@@ -8,7 +8,7 @@ Currently, the app lets you search for characters by name, and shows you informa
 
 ---
 
-Technical details:
+### Technical details:
 
 - ReactJS
 - [swapi.dev](https://swapi.dev) for the API
@@ -17,9 +17,9 @@ Technical details:
 - styled-components
 - fontawesome for icons
 
-To run locally:
+### To run locally:
 
 - Git clone to your machine
 - `cd` into `swapi-search`
-- `yarn install`
-- `yarn start`
+- Run `yarn install` to install any dependencies
+- And finally, `yarn start` to run development build
