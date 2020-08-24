@@ -42,9 +42,6 @@ export const getCharacterInfo = async (id, cancelToken) => {
 };
 
 export const getSpeciesInfo = async (url, cancelToken) => {
-  if (!url) {
-    throw 'No valid species found';
-  }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
     cancelToken: cancelToken,

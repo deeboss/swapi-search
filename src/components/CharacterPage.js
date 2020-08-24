@@ -49,8 +49,10 @@ const CharacterPage = ({ match }) => {
   const handleHomeworldRequest = async (data) => {
     try {
       const { homeworld_url } = data;
-      const results = await getHomeworldInfo(homeworld_url, signal.token);
-      setHomeworld(results);
+      if (homeworld_url) {
+        const results = await getHomeworldInfo(homeworld_url, signal.token);
+        setHomeworld(results);
+      }
     } catch (err) {
       if (!axios.isCancel(err)) {
         console.error(err);
@@ -61,8 +63,10 @@ const CharacterPage = ({ match }) => {
   const handleSpeciesRequest = async (data) => {
     try {
       const { species_url } = data;
-      const { name } = await getSpeciesInfo(species_url, signal.token);
-      setSpecies(name);
+      if (species_url) {
+        const { name } = await getSpeciesInfo(species_url, signal.token);
+        setSpecies(name);
+      }
     } catch (err) {
       if (!axios.isCancel(err)) {
         console.error(err);
@@ -73,12 +77,14 @@ const CharacterPage = ({ match }) => {
   const handleMultipleFilmRequest = async (data) => {
     try {
       const { films_url } = data;
-      const result = await Promise.all(
-        films_url.map((url) => {
-          return getFilmInfo(url, signal.token);
-        })
-      );
-      setFilms(result);
+      if (films_url) {
+        const result = await Promise.all(
+          films_url.map((url) => {
+            return getFilmInfo(url, signal.token);
+          })
+        );
+        setFilms(result);
+      }
     } catch (err) {
       if (!axios.isCancel(err)) {
         console.error(err);

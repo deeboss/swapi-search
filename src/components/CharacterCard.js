@@ -21,11 +21,13 @@ const CharacterCard = ({ character }) => {
 
   const handleSpeciesRequest = async () => {
     try {
-      const { name } = await getSpeciesInfo(
-        character.species_url,
-        signal.token
-      );
-      setSpecies(name);
+      if (character.species_url) {
+        const { name } = await getSpeciesInfo(
+          character.species_url,
+          signal.token
+        );
+        setSpecies(name);
+      }
     } catch (err) {
       if (!axios.isCancel(err)) {
         console.error(err);
@@ -35,11 +37,13 @@ const CharacterCard = ({ character }) => {
 
   const handleHomeworldRequest = async () => {
     try {
-      const results = await getHomeworldInfo(
-        character.homeworld_url,
-        signal.token
-      );
-      setHomeworld(results);
+      if (character.homeworld_url) {
+        const results = await getHomeworldInfo(
+          character.homeworld_url,
+          signal.token
+        );
+        setHomeworld(results);
+      }
     } catch (err) {
       if (!axios.isCancel(err)) {
         console.error(err);
