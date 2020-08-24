@@ -29,7 +29,7 @@ export const getPageResults = async (url) => {
 
 export const getCharacterInfo = async (id, cancelToken) => {
   const response = await axios.get(`https://swapi.dev/api/people/${id}/`, {
-    cancelToken: cancelToken,
+    cancelToken,
   });
   const data = response.data;
   return {
@@ -44,7 +44,7 @@ export const getCharacterInfo = async (id, cancelToken) => {
 export const getSpeciesInfo = async (url, cancelToken) => {
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
-    cancelToken: cancelToken,
+    cancelToken,
   });
   const data = response.data;
   return {
@@ -58,7 +58,7 @@ export const getHomeworldInfo = async (url, cancelToken) => {
   }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
-    cancelToken: cancelToken,
+    cancelToken,
   });
   const data = response.data;
 
@@ -78,7 +78,7 @@ export const getFilmInfo = async (url, cancelToken) => {
   }
   const httpsUrl = url.replace(/^http:\/\//i, 'https://');
   const response = await axios.get(httpsUrl, {
-    cancelToken: cancelToken,
+    cancelToken,
   });
   const data = response.data;
   // Clip opening crawl to first 150 characters
