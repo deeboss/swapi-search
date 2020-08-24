@@ -87,7 +87,7 @@ const Card = styled.div`
   width: 100%;
   padding: 2em;
   margin-bottom: 2em;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   transform: scale(0.98);
   transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
   position: relative;

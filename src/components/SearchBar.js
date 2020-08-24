@@ -216,7 +216,7 @@ const EmptyStateBox = styled.div`
   width: 100%;
   height: 350px;
   margin-top: 50px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
