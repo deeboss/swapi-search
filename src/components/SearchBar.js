@@ -130,7 +130,7 @@ const SearchBar = ({ setCharacters, isLoading, setIsLoading }) => {
         <EmptyStateBox>
           <MessageTitle>No results found</MessageTitle>
           <MessageSubtitle>
-            Try adjusting your search to find the character you're looking for.
+            Try adjusting your search to find the character you are looking for.
           </MessageSubtitle>
         </EmptyStateBox>
       )}
@@ -222,6 +222,7 @@ const EmptyStateBox = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  padding: 20px;
 
   @media only screen and (min-width: 600px) {
     height: 350px;
