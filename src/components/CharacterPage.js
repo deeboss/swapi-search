@@ -124,10 +124,12 @@ const CharacterPage = ({ match }) => {
                   {species && <SpeciesText>({species})</SpeciesText>}
                 </Title>
               )}
-              {homeworld.name && (
+              {homeworld.name ? (
                 <Subtitle>
                   From {homeworld.name} (population: {homeworld.population})
                 </Subtitle>
+              ) : (
+                <FontAwesomeIcon icon={faCircleNotch} spin />
               )}
             </Container>
             <Container>
@@ -137,11 +139,13 @@ const CharacterPage = ({ match }) => {
             </Container>
           </Header>
           <Container>
-            {films[0] && (
+            {films[0] ? (
               <>
                 <LabelTitle>Film(s) appeared in:</LabelTitle>
                 <div>{films && <FilmList films={films} />}</div>
               </>
+            ) : (
+              <FontAwesomeIcon icon={faCircleNotch} spin size="3x" />
             )}
           </Container>
         </Wrapper>
